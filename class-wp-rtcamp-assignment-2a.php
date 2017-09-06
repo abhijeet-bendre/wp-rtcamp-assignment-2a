@@ -40,8 +40,8 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function __construct() {
-		add_action( 'init', array( $this, 'register_rtcamp_slideshow_post_type' ) );
-
+		add_action( 'init', array( $this, 'wprtc_register_rtcamp_slideshow_post_type' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
 	}
 
 	/**
@@ -49,7 +49,7 @@ class Wp_Rtcamp_Assignment_2a {
 	 *
 	 * @since 0.1
 	 */
-	public function register_rtcamp_slideshow_post_type() {
+	public function wprtc_register_rtcamp_slideshow_post_type() {
 
 		// Register Custom Post Type.
 			$labels = array(
@@ -88,6 +88,17 @@ class Wp_Rtcamp_Assignment_2a {
 
 			register_post_type( 'rtcamp_slideshow' , $args );
 	}
+	/**
+	 * Init assets such as JS/CSS, required by plugin
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_init_assets() {
+		wp_register_script( 'wprtc_slideshow_main_2a', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js' );
+		wp_enqueue_script( 'wprtc_slideshow_main_2a', array( 'jquery' ) );
+		wp_localize_script( 'wprtc_slideshow_main_2a', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+	}
+
 
 	/**
 	 * Setup Metaboxes for CPT 'rtcamp_slideshow'
