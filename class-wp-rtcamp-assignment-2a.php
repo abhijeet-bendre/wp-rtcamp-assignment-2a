@@ -114,7 +114,17 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function rtcamp_render_slideshow_metaboxes() {
-		// magic goes here.
+		global $post;
+		$image_attachment_id = get_post_meta( $post->ID, 'media_selector_attachment_id', true );
+		wp_enqueue_media();
+		wp_localize_script( 'wprtc_slideshow_main_2a', 'post', array( 'post_id' => $post->ID ) );
+		?>
+		 <div class='image-preview-wrapper'>
+			 <img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id' ) ); ?>' height='100'>
+			 <input type='hidden' name='image_attachment_id' id='image_attachment_id' value='<?php echo $image_attachment_id; ?>'>
+			 <input id="upload_image_button" type="button" class="button" value="<?php _e( 'Add image' ); ?>" />
+		 </div>
+		<?php
 	}
 }
 
