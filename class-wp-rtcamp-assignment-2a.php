@@ -1,4 +1,4 @@
-'wp_rtcamp_assignment_2a'<?php
+<?php
 /**
  *  Assignment-2a: WordPress-Slideshow Plugin
  *
@@ -21,8 +21,6 @@ Text Domain: wp_rtcamp_assignment_2a
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
-
-namespace  Wp_Rtcamp_Assignment_2a;
 
 define( 'WPRTC_2A_PLUGIN_NAME', 'wp-rtcamp-assignment-2a' );
 define( 'WPRTC_2A_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
@@ -47,7 +45,7 @@ class Wp_Rtcamp_Assignment_2a {
 	}
 
 	/**
-	 * Register CPT 'rtcamp_slideshow'
+	 * Registered CPT 'rtcamp_slideshow'
 	 *
 	 * @since 0.1
 	 */
@@ -74,7 +72,8 @@ class Wp_Rtcamp_Assignment_2a {
 				'label'               => __( 'rtCamp Slideshow', 'wp_rtcamp_assignment_2a' ),
 				'description'         => __( 'rtCamp Slideshow', 'wp_rtcamp_assignment_2a' ),
 				'labels'              => $labels,
-				'supports'            => array( 'thumbnail', 'author' ),
+				'supports'            => array( 'title' ),
+				'register_meta_box_cb' => array( $this, 'rtcamp_setup_slideshow_metaboxes' ),
 				'hierarchical'        => false,
 				'public'              => true,
 				'show_ui'             => true,
@@ -88,6 +87,23 @@ class Wp_Rtcamp_Assignment_2a {
 			);
 
 			register_post_type( 'rtcamp_slideshow' , $args );
+	}
+
+	/**
+	 * Setup Metaboxes for CPT 'rtcamp_slideshow'
+	 *
+	 * @since 0.1
+	 */
+	public function rtcamp_setup_slideshow_metaboxes() {
+		add_meta_box( 'rtcamp_slideshow',  __( 'Add Slides', 'wp_rtcamp_assignment_2a' ), array( $this, 'rtcamp_render_slideshow_metaboxes' ), 'rtcamp_slideshow', 'normal', 'default' );
+	}
+	/**
+	 * Setup Metaboxes for CPT 'rtcamp_slideshow'
+	 *
+	 * @since 0.1
+	 */
+	public function rtcamp_render_slideshow_metaboxes() {
+		// magic goes here.
 	}
 }
 
