@@ -94,9 +94,14 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function wprtc_init_assets() {
-		wp_register_script( 'wprtc_slideshow_main_2a', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js' );
-		wp_enqueue_script( 'wprtc_slideshow_main_2a', array( 'jquery' ) );
-		wp_localize_script( 'wprtc_slideshow_main_2a', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+		// Enqueue Style.
+		wp_register_style( 'wprtc_slideshow_main_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_main_2a.css',null );
+		wp_enqueue_style( 'wprtc_slideshow_main_2a_css' );
+
+		// Registe Style.
+		wp_register_script( 'wprtc_slideshow_main_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js' );
+		wp_enqueue_script( 'wprtc_slideshow_main_2a_js', array( 'jquery' ) );
+		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
 	}
 
 
@@ -115,15 +120,28 @@ class Wp_Rtcamp_Assignment_2a {
 	 */
 	public function rtcamp_render_slideshow_metaboxes() {
 		global $post;
-		$image_attachment_id = get_post_meta( $post->ID, 'media_selector_attachment_id', true );
+		$slide_images = get_post_meta( $post->ID, '_wprtc_slideshow_slides' );
+		if ( ! empty( $slide_images ) ) {
+			foreach ( $slide_images as $slide_order => $slide_url ) {
+				echo "<div class='slideshow-wrapper'>
+		 						<div class='image-preview-wrapper'>
+			 						<img class='image-preview' src='" . wp_get_attachment_url( $slide_url ) . "' height='150'>
+			 						<input type='hidden' name='slide_order_" . $slide_order . "' id='image_attachment_id' value='" . $slide_order_url . "'>
+			 					</div>
+		 					</div>";
+			}
+		} else {
+				echo "<div class='slideshow-wrapper'></div>";
+		}
+
+		echo "<div class='button-wrapper'>
+						<input id='rtcamp_add_new_slide' type='button upload_image_button' class='button' value='" . __( 'Add New Slide', 'wp_rtcamp_assignment_2a' ) . "' />
+					</div>";
+
 		wp_enqueue_media();
-		wp_localize_script( 'wprtc_slideshow_main_2a', 'post', array( 'post_id' => $post->ID ) );
+		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'post', array( 'ID' => $post->ID ) );
 		?>
-		 <div class='image-preview-wrapper'>
-			 <img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id' ) ); ?>' height='100'>
-			 <input type='hidden' name='image_attachment_id' id='image_attachment_id' value='<?php echo $image_attachment_id; ?>'>
-			 <input id="upload_image_button" type="button" class="button" value="<?php _e( 'Add image' ); ?>" />
-		 </div>
+
 		<?php
 	}
 }
