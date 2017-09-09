@@ -1,8 +1,9 @@
-.image-preview-wrapper{
+.wprtc_image_preview_wrapper {
   border: 1px dotted grey;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
-.button-wrapper {
+
+.wprtc_button_wrapper {
   border: 2px dashed #b4b9be;
   padding: 10px;
   text-align: center;

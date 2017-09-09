@@ -16,7 +16,7 @@ Author URI:  http://tymescripts.com
 License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Domain Path: /languages
-Text Domain: wp_rtcamp_assignment_2a
+Text Domain: wprtc_assignment_2a
 */
 
 // Exit if accessed directly.
@@ -53,27 +53,27 @@ class Wp_Rtcamp_Assignment_2a {
 
 		// Register Custom Post Type.
 			$labels = array(
-				'name'                => _x( 'rtCamp Slideshow', 'rtcamp_slideshow', 'wp_rtcamp_assignment_2a' ),
-				'singular_name'       => _x( 'rtCamp slideshow', 'rtcamp_slideshow', 'wp_rtcamp_assignment_2a' ),
-				'menu_name'           => _x( 'rtCamp slideshow', 'wp_rtcamp_assignment_2a' ),
-				'name_admin_bar'      => __( 'rtCamp slideshow', 'wp_rtcamp_assignment_2a' ),
-				'all_items'           => __( 'All rtCamp Sliders', 'wp_rtcamp_assignment_2a' ),
-				'add_new_item'        => __( 'Add New rtCamp Slider', 'wp_rtcamp_assignment_2a' ),
-				'add_new'             => __( 'Add New', 'wp_rtcamp_assignment_2a' ),
-				'new_item'            => __( 'New rtCamp Slider', 'wp_rtcamp_assignment_2a' ),
-				'edit_item'           => __( 'Edit rtCamp Slider', 'wp_rtcamp_assignment_2a' ),
-				'update_item'         => __( 'Update rtCamp Slider', 'wp_rtcamp_assignment_2a' ),
-				'view_item'           => __( 'View rtCamp Slider', 'wp_rtcamp_assignment_2a' ),
-				'not_found'           => __( 'Not found', 'wp_rtcamp_assignment_2a' ),
-				'not_found_in_trash'  => __( 'Not found in Trash', 'wp_rtcamp_assignment_2a' ),
+				'name'                => _x( 'rtCamp Slideshow', 'rtcamp_slideshow', 'wprtc_assignment_2a' ),
+				'singular_name'       => _x( 'rtCamp slideshow', 'rtcamp_slideshow', 'wprtc_assignment_2a' ),
+				'menu_name'           => _x( 'rtCamp slideshow', 'wprtc_assignment_2a' ),
+				'name_admin_bar'      => __( 'rtCamp slideshow', 'wprtc_assignment_2a' ),
+				'all_items'           => __( 'All rtCamp Sliders', 'wprtc_assignment_2a' ),
+				'add_new_item'        => __( 'Add New rtCamp Slider', 'wprtc_assignment_2a' ),
+				'add_new'             => __( 'Add New', 'wprtc_assignment_2a' ),
+				'new_item'            => __( 'New rtCamp Slider', 'wprtc_assignment_2a' ),
+				'edit_item'           => __( 'Edit rtCamp Slider', 'wprtc_assignment_2a' ),
+				'update_item'         => __( 'Update rtCamp Slider', 'wprtc_assignment_2a' ),
+				'view_item'           => __( 'View rtCamp Slider', 'wprtc_assignment_2a' ),
+				'not_found'           => __( 'Not found', 'wprtc_assignment_2a' ),
+				'not_found_in_trash'  => __( 'Not found in Trash', 'wprtc_assignment_2a' ),
 			);
 
 			$args = array(
-				'label'               => __( 'rtCamp Slideshow', 'wp_rtcamp_assignment_2a' ),
-				'description'         => __( 'rtCamp Slideshow', 'wp_rtcamp_assignment_2a' ),
+				'label'               => __( 'rtCamp Slideshow', 'wprtc_assignment_2a' ),
+				'description'         => __( 'rtCamp Slideshow', 'wprtc_assignment_2a' ),
 				'labels'              => $labels,
 				'supports'            => array( 'title' ),
-				'register_meta_box_cb' => array( $this, 'rtcamp_setup_slideshow_metaboxes' ),
+				'register_meta_box_cb' => array( $this, 'wprtc_setup_slideshow_metaboxes' ),
 				'hierarchical'        => false,
 				'public'              => true,
 				'show_ui'             => true,
@@ -86,7 +86,7 @@ class Wp_Rtcamp_Assignment_2a {
 				'publicly_queryable'  => true,
 			);
 
-			register_post_type( 'rtcamp_slideshow' , $args );
+			register_post_type( 'wprtc_slideshow' , $args );
 	}
 	/**
 	 * Init assets such as JS/CSS, required by plugin
@@ -106,42 +106,42 @@ class Wp_Rtcamp_Assignment_2a {
 
 
 	/**
-	 * Setup Metaboxes for CPT 'rtcamp_slideshow'
+	 * Setup Metaboxes for CPT 'wprtc_slideshow'
 	 *
 	 * @since 0.1
 	 */
-	public function rtcamp_setup_slideshow_metaboxes() {
-		add_meta_box( 'rtcamp_slideshow',  __( 'Add Slides', 'wp_rtcamp_assignment_2a' ), array( $this, 'rtcamp_render_slideshow_metaboxes' ), 'rtcamp_slideshow', 'normal', 'default' );
+	public function wprtc_setup_slideshow_metaboxes() {
+		add_meta_box( 'wprtc_slideshow',  __( 'Add Slides', 'wprtc_assignment_2a' ), array( $this, 'wprtc_render_slideshow_metaboxes' ), 'wprtc_slideshow', 'normal', 'default' );
 	}
+
 	/**
-	 * Setup Metaboxes for CPT 'rtcamp_slideshow'
+	 * Render Metaboxes for CPT 'rtcamp_slideshow'
 	 *
 	 * @since 0.1
 	 */
-	public function rtcamp_render_slideshow_metaboxes() {
+	public function wprtc_render_slideshow_metaboxes() {
 		global $post;
 		$slide_images = get_post_meta( $post->ID, '_wprtc_slideshow_slides' );
 		if ( ! empty( $slide_images ) ) {
 			foreach ( $slide_images as $slide_order => $slide_url ) {
-				echo "<div class='slideshow-wrapper'>
-		 						<div class='image-preview-wrapper'>
-			 						<img class='image-preview' src='" . wp_get_attachment_url( $slide_url ) . "' height='150'>
-			 						<input type='hidden' name='slide_order_" . $slide_order . "' id='image_attachment_id' value='" . $slide_order_url . "'>
+				echo "<div class='wprtc_slideshow_wrapper'>
+		 						<div class='wprtc_image_preview_wrapper'>
+			 						<img class='wprtc_image_preview' src='" . wp_get_attachment_url( $slide_url ) . "' height='150'>
+			 						<input type='hidden' name='wprtc_slide_order_" . $slide_order . "' value='" . $slide_order_url . "'>
 			 					</div>
 		 					</div>";
 			}
 		} else {
-				echo "<div class='slideshow-wrapper'></div>";
+				echo "<div class='wprtc_slideshow_wrapper'></div>";
 		}
 
-		echo "<div class='button-wrapper'>
-						<input id='rtcamp_add_new_slide' type='button upload_image_button' class='button' value='" . __( 'Add New Slide', 'wp_rtcamp_assignment_2a' ) . "' />
+		echo "<div class='wprtc_button_wrapper'>
+						<input id='wprtc_add_new_slide' type='button upload_image_button' class='button' value='" . __( 'Add New Slide', 'wprtc_assignment_2a' ) . "'/>
 					</div>";
 
 		wp_enqueue_media();
 		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'post', array( 'ID' => $post->ID ) );
 		?>
-
 		<?php
 	}
 }

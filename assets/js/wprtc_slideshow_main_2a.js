@@ -5,19 +5,19 @@ jQuery(document).ready(function(){
 	var file_frame;
 	var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
 
-  jQuery('#upload_image_button').on('click', function( event ){
+  jQuery('#wprtc_add_new_slide').on('click', function( event ){
       event.preventDefault();
 
 				// If the media frame already exists, reopen it.
 				if ( file_frame ) {
 					// Set the post ID to what we want
-					file_frame.uploader.uploader.param( 'post_id', post.post_id );
+					file_frame.uploader.uploader.param( 'post_id', post.ID );
 					// Open frame
 					file_frame.open();
 					return;
 				} else {
 					// Set the wp.media post id so the uploader grabs the ID we want when initialised
-					wp.media.model.settings.post.id = post.post_id;
+					wp.media.model.settings.post.id = post.ID;
 				}
 
 				// Create the media frame.
@@ -35,9 +35,19 @@ jQuery(document).ready(function(){
 					attachment = file_frame.state().get('selection').first().toJSON();
 
 					// Do something with attachment.id and/or attachment.url here
-					jQuery( '#image-preview' ).attr( 'src', attachment.url ).css( 'width', 'auto' );
-					jQuery( '#image_attachment_id' ).val( attachment.id );
+					//jQuery( '#image-preview' ).attr( 'src', attachment.url ).css( 'width', 'auto' );
+					//jQuery( '#image_attachment_id' ).val( attachment.id );
+          console.log(attachment);
 
+          var num_of_slides = jQuery('.wprtc_image_preview_wrapper').length;
+          num_of_slides =  num_of_slides + 1;
+
+          var image_preview = "<div class='wprtc_image_preview_wrapper'>";
+          image_preview += "<img class='wprtc_image_preview' src='"+ attachment.url +"' height='150'>";
+          image_preview += "<input type='hidden' name='wprtc_slide_order["+ num_of_slides +"]' value='"+ attachment.url +"'>";
+          image_preview += "</div";
+
+          jQuery('.wprtc_slideshow_wrapper').append(image_preview);
 					// Restore the main post ID
 					wp.media.model.settings.post.id = wp_media_post_id;
 				});
