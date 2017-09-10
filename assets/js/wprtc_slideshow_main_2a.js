@@ -44,7 +44,7 @@ jQuery(document).ready(function(){
 
           var image_preview = "<div class='wprtc_image_preview_wrapper'>";
           image_preview += "<img class='wprtc_image_preview' src='"+ attachment.url +"' height='150'>";
-          image_preview += "<input type='hidden' name='wprtc_slide_order["+ num_of_slides +"]' value='"+ attachment.url +"'>";
+          image_preview += "<input type='hidden' name='wprtc_slide_order["+ num_of_slides +"]' value='"+ attachment.id +"'>";
           image_preview += "</div";
 
           jQuery('.wprtc_slideshow_wrapper').append(image_preview);

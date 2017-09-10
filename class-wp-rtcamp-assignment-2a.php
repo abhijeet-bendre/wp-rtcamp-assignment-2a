@@ -42,10 +42,11 @@ class Wp_Rtcamp_Assignment_2a {
 	public function __construct() {
 		add_action( 'init', array( $this, 'wprtc_register_rtcamp_slideshow_post_type' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
+		add_action( 'save_post', array( $this, 'wprtc_save_slides' ), 10 );
 	}
 
 	/**
-	 * Registered CPT 'rtcamp_slideshow'
+	 * Register CPT 'wprtc_slideshow'
 	 *
 	 * @since 0.1
 	 */
@@ -118,23 +119,27 @@ class Wp_Rtcamp_Assignment_2a {
 	}
 
 	/**
-	 * Render Metaboxes for CPT 'rtcamp_slideshow'
+	 * Render Metaboxes for CPT 'wprtc_slideshow'
 	 *
 	 * @since 0.1
 	 */
 	public function wprtc_render_slideshow_metaboxes() {
 		global $post;
 		wp_enqueue_media();
-		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'post', array( 'ID' => $post->ID ) );
-		$slide_images = get_post_meta( $post->ID, '_wprtc_slideshow_slides' );
-
+		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'post',
+			array(
+				'ID' => $post->ID,
+			)
+		);
+		$slider_images = get_post_meta( $post->ID, '_wprtc_slideshow_slides' );
+		$slider_images = $slider_images[0] ;
 		ob_start();
 		echo "<div class='wprtc_slideshow_wrapper' id='wprtc_sortable'>";
-		if ( ! empty( $slide_images ) ) {
-			foreach ( $slide_images as $slide_order => $slide_url ) {
+		if ( ! empty( $slider_images ) ) {
+			foreach ( $slider_images as $slide_order => $slide_atachment_id ) {
 				echo "<div class='wprtc_image_preview_wrapper'>
-			 					<img class='wprtc_image_preview' src='" . wp_get_attachment_url( $slide_url ) . "' height='150'>
-			 					<input type='hidden' name='wprtc_slide_order_" . $slide_order . "' value='" . $slide_order_url . "'>
+			 					<img class='wprtc_image_preview' src='" . wp_get_attachment_url( $slide_atachment_id ) . "' height='150'>
+			 					<input type='hidden' name='wprtc_slide_order[" . $slide_order . "]' value='" . $slide_atachment_id . "'>
 			 				</div>";
 			}
 		}
@@ -143,6 +148,43 @@ class Wp_Rtcamp_Assignment_2a {
 						<input id='wprtc_add_new_slide' type='button upload_image_button' class='button' value='" . __( 'Add New Slide', 'wprtc_assignment_2a' ) . "'/>
 					</div>";
 		ob_get_flush();
+	}
+
+	/**
+	 * 'save_post' callback for saving Slides.
+	 *
+	 * @param int $post_id Post Id.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_save_slides( $post_id ) {
+		global $post;
+		$wprtc_slides = array();
+
+		// If doing auto save return.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// Check if valid post_type.
+		if ( 'wprtc_slideshow' !== $_POST['post_type'] ) {
+			return;
+		}
+
+		$output = print_r( $_POST, true );
+		file_put_contents( 'file.txt', $output );
+
+		foreach ( $_POST as $post_key => $post_value ) {
+			// $key is input hidden , $value is attachment id
+			if ( strpos( $post_key, 'wprtc_' ) !== false ) {
+				$wprtc_slides = $post_value;
+
+				array_walk( $wprtc_slides, function( &$wprtc_value, &$wprtc_key ) {
+						$wprtc_slides[ $wprtc_key ] = $wprtc_value;
+				});
+			}
+		}
+		update_post_meta( $post_id, '_wprtc_slideshow_slides', $wprtc_slides );
 	}
 }
 
