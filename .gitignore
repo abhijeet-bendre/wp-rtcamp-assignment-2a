@@ -3,4 +3,4 @@ phpcs.ruleset.xml
 phpunit.xml.dist
 .jshintrc
 
-
+/bin
