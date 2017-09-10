@@ -60,4 +60,23 @@ jQuery(document).ready(function(){
 			jQuery( 'a.add_media' ).on( 'click', function() {
 				wp.media.model.settings.post.id = wp_media_post_id;
 			});
+
+      // Sort slider Images.
+      jQuery( function() {
+        jQuery( "#wprtc_sortable" ).sortable({
+          placeholder: "wprtc_state_highlight",
+          start: function(e, ui){
+            ui.placeholder.height(ui.item.height());
+          },
+          update: function(event, ui) {
+             jQuery(".wprtc_image_preview_wrapper").each(function(i, el){
+               var slide_order = jQuery(el).index()+1;
+               jQuery(this).find('input[type=hidden]').attr('name', 'wprtc_slide_order['+ slide_order +']' ); // updates the attribute
+            });
+          }
+        });
+
+        jQuery( "#wprtc_sortable" ).disableSelection();
+      });
+
 });

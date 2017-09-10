@@ -7,5 +7,11 @@
   border: 2px dashed #b4b9be;
   padding: 10px;
   text-align: center;
+}
 
+.wprtc_state_highlight {
+	border: 1px solid #dad55e;
+	background: #fffa90;
+	color: #777620;
+  line-height: 1.2em;
 }

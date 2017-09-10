@@ -94,16 +94,19 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function wprtc_init_assets() {
-		// Enqueue Style.
+		// Register and Enqueue Style.
 		wp_register_style( 'wprtc_slideshow_main_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_main_2a.css',null );
 		wp_enqueue_style( 'wprtc_slideshow_main_2a_css' );
 
-		// Registe Style.
+		// Register and Enqueue Script.
 		wp_register_script( 'wprtc_slideshow_main_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js' );
 		wp_enqueue_script( 'wprtc_slideshow_main_2a_js', array( 'jquery' ) );
 		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-	}
 
+		if ( ! wp_script_is( 'jquery-ui', 'enqueued' ) ) {
+			wp_enqueue_script( 'jquery-ui' );
+		}
+	}
 
 	/**
 	 * Setup Metaboxes for CPT 'wprtc_slideshow'
@@ -121,28 +124,25 @@ class Wp_Rtcamp_Assignment_2a {
 	 */
 	public function wprtc_render_slideshow_metaboxes() {
 		global $post;
+		wp_enqueue_media();
+		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'post', array( 'ID' => $post->ID ) );
 		$slide_images = get_post_meta( $post->ID, '_wprtc_slideshow_slides' );
+
+		ob_start();
+		echo "<div class='wprtc_slideshow_wrapper' id='wprtc_sortable'>";
 		if ( ! empty( $slide_images ) ) {
 			foreach ( $slide_images as $slide_order => $slide_url ) {
-				echo "<div class='wprtc_slideshow_wrapper'>
-		 						<div class='wprtc_image_preview_wrapper'>
-			 						<img class='wprtc_image_preview' src='" . wp_get_attachment_url( $slide_url ) . "' height='150'>
-			 						<input type='hidden' name='wprtc_slide_order_" . $slide_order . "' value='" . $slide_order_url . "'>
-			 					</div>
-		 					</div>";
+				echo "<div class='wprtc_image_preview_wrapper'>
+			 					<img class='wprtc_image_preview' src='" . wp_get_attachment_url( $slide_url ) . "' height='150'>
+			 					<input type='hidden' name='wprtc_slide_order_" . $slide_order . "' value='" . $slide_order_url . "'>
+			 				</div>";
 			}
-		} else {
-				echo "<div class='wprtc_slideshow_wrapper'></div>";
 		}
-
+		echo '</div>';
 		echo "<div class='wprtc_button_wrapper'>
 						<input id='wprtc_add_new_slide' type='button upload_image_button' class='button' value='" . __( 'Add New Slide', 'wprtc_assignment_2a' ) . "'/>
 					</div>";
-
-		wp_enqueue_media();
-		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'post', array( 'ID' => $post->ID ) );
-		?>
-		<?php
+		ob_get_flush();
 	}
 }
 
