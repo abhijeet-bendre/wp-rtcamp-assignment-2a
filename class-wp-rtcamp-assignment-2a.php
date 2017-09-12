@@ -89,6 +89,7 @@ class Wp_Rtcamp_Assignment_2a {
 
 			register_post_type( 'wprtc_slideshow' , $args );
 	}
+
 	/**
 	 * Init assets such as JS/CSS, required by plugin
 	 *
@@ -167,7 +168,7 @@ class Wp_Rtcamp_Assignment_2a {
 		}
 
 		// Check if valid post_type.
-		if ( 'wprtc_slideshow' !== $_POST['post_type'] ) {
+		if ( 'wprtc_slideshow' !== sanitize_text_field( $_POST['post_type'] ) ) {
 			return;
 		}
 
@@ -185,6 +186,8 @@ class Wp_Rtcamp_Assignment_2a {
 			}
 		}
 		update_post_meta( $post_id, '_wprtc_slideshow_slides', $wprtc_slides );
+		echo "halted";
+		die();
 	}
 }
 
