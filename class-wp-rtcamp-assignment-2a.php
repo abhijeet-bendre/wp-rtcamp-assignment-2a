@@ -42,7 +42,9 @@ class Wp_Rtcamp_Assignment_2a {
 	public function __construct() {
 		add_action( 'init', array( $this, 'wprtc_register_rtcamp_slideshow_post_type' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'wprtc_init_front_end_assets' ) );
 		add_action( 'save_post', array( $this, 'wprtc_save_slides' ), 10 );
+
 	}
 
 	/**
@@ -111,6 +113,26 @@ class Wp_Rtcamp_Assignment_2a {
 	}
 
 	/**
+	 * Init Front-end assets such as JS/CSS, required by plugin
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_init_front_end_assets() {
+
+		// Register and Enqueue Style only if its not previously enqueued.
+		if ( ! wp_style_is( 'flexslider_style', 'enqueued' ) ) {
+			wp_register_style( 'flexslider_style', plugin_dir_url( __FILE__ ) . 'assets/css/lib/flexslider.css', null );
+			$registered  = wp_enqueue_style( 'flexslider_style' );
+		}
+
+		// Register and Enqueue Script only if its not previously enqueued.
+		if ( ! wp_script_is( 'flexslider_script', 'enqueued' ) ) {
+			wp_register_script( 'flexslider_script', plugin_dir_url( __FILE__ ) . 'assets/js/lib/jquery.flexslider-min.js' );
+			wp_enqueue_script( 'flexslider_script', array( 'jquery' ) );
+		}
+	}
+
+	/**
 	 * Setup Metaboxes for CPT 'wprtc_slideshow'
 	 *
 	 * @since 0.1
@@ -133,10 +155,10 @@ class Wp_Rtcamp_Assignment_2a {
 			)
 		);
 		$slider_images = get_post_meta( $post->ID, '_wprtc_slideshow_slides' );
-		$slider_images = $slider_images[0] ;
 		ob_start();
 		echo "<div class='wprtc_slideshow_wrapper' id='wprtc_sortable'>";
 		if ( ! empty( $slider_images ) ) {
+			$slider_images = $slider_images[0];
 			foreach ( $slider_images as $slide_order => $slide_atachment_id ) {
 				echo "<div class='wprtc_image_preview_wrapper'>
 			 					<img class='wprtc_image_preview' src='" . wp_get_attachment_url( $slide_atachment_id ) . "' height='150'>
@@ -168,8 +190,10 @@ class Wp_Rtcamp_Assignment_2a {
 		}
 
 		// Check if valid post_type.
-		if ( 'wprtc_slideshow' !== sanitize_text_field( $_POST['post_type'] ) ) {
-			return;
+		if ( isset( $_POST['post_type'] ) ) {
+			if ( 'wprtc_slideshow' !== sanitize_text_field( $_POST['post_type'] ) ) {
+				return;
+			}
 		}
 
 		$output = print_r( $_POST, true );
@@ -186,9 +210,10 @@ class Wp_Rtcamp_Assignment_2a {
 			}
 		}
 		update_post_meta( $post_id, '_wprtc_slideshow_slides', $wprtc_slides );
-		echo "halted";
-		die();
+		//var_dump( $_POST);
+		//die();
 	}
+
 }
 
 new Wp_Rtcamp_Assignment_2a();
