@@ -103,7 +103,7 @@ class Wp_Rtcamp_Assignment_2a {
 	 */
 	public function wprtc_init_assets() {
 		// Register and Enqueue Style.
-		wp_register_style( 'wprtc_slideshow_main_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_main_2a.css',null );
+		wp_register_style( 'wprtc_slideshow_main_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_main_2a.css', null );
 		wp_enqueue_style( 'wprtc_slideshow_main_2a_css' );
 
 		// Register and Enqueue Script.
@@ -129,7 +129,11 @@ class Wp_Rtcamp_Assignment_2a {
 			$registered  = wp_enqueue_style( 'flexslider_style' );
 		}
 
-		// Register and Enqueue Script only if its not previously enqueued.
+		// Register and Enqueue Style slideshow frontend js.
+		wp_register_script( 'wprtc_slideshow_frontend_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_frontend_2a.js' );
+		wp_enqueue_script( 'wprtc_slideshow_frontend_2a_js', array( 'jquery' ) );
+
+		// Register and Enqueue flexslider_script only if its not previously enqueued.
 		if ( ! wp_script_is( 'flexslider_script', 'enqueued' ) ) {
 			wp_register_script( 'flexslider_script', plugin_dir_url( __FILE__ ) . 'assets/js/lib/jquery.flexslider-min.js' );
 			wp_enqueue_script( 'flexslider_script', array( 'jquery' ) );
