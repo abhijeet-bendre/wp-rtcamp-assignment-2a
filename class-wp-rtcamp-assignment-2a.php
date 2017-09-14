@@ -44,7 +44,11 @@ class Wp_Rtcamp_Assignment_2a {
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprtc_init_front_end_assets' ) );
 		add_action( 'save_post', array( $this, 'wprtc_save_slides' ), 10 );
+		add_shortcode( 'wprtc_slideshow', array( $this, 'wprtc_slideshow' ) );
 
+		// Attach hook for adding Custom Column to wprtc_slideshow CPT.
+		add_filter( 'manage_posts_columns', array( $this, 'wprtc_slideshow_cpt_table_columns_title' ) );
+		add_action( 'manage_posts_custom_column', array( $this, 'wprtc_slideshow_cpt_table_columns_content' ), 10, 2 );
 	}
 
 	/**
@@ -133,6 +137,36 @@ class Wp_Rtcamp_Assignment_2a {
 	}
 
 	/**
+	 * Add Column Title to wprtc_slideshow post_type.
+	 *
+	 * @param array $defaults Default Columns for CPT.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_slideshow_cpt_table_columns_title( $defaults ) {
+		$post_type = $_GET['post_type'];
+		if ( isset( $post_type ) == true && 'wprtc_slideshow' === $post_type ) {
+			 $defaults['wprtc_slideshow_shortcode'] = 'Shortcode';
+		}
+		return $defaults;
+	}
+
+	/**
+	 * Add Column Content to wprtc_slideshow post_type.
+	 *
+	 * @param string $column_name Column Name.
+	 *
+	 * @param string $slider_id Contains slider id (post_id).
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_slideshow_cpt_table_columns_content( $column_name, $slider_id ) {
+		if ( 'wprtc_slideshow_shortcode' === $column_name ) {
+			echo '[wprtc_slideshow slider_id=' . $slider_id . ']';
+		}
+	}
+
+	/**
 	 * Setup Metaboxes for CPT 'wprtc_slideshow'
 	 *
 	 * @since 0.1
@@ -210,10 +244,45 @@ class Wp_Rtcamp_Assignment_2a {
 			}
 		}
 		update_post_meta( $post_id, '_wprtc_slideshow_slides', $wprtc_slides );
-		//var_dump( $_POST);
-		//die();
 	}
 
+	/**
+	 * Call back function for [wprtc_slideshow slider_id=1] shortcode
+	 *
+	 * @param int $args shortcode args.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_slideshow( $args ) {
+
+		// Normalize attribute keys, lowercase.
+		$args = array_change_key_case( (array) $args, CASE_LOWER );
+
+		// Extract shorcode atts.
+		shortcode_atts( array(), $args , 'wprtc_slideshow' );
+
+		if ( ! isset( $args['slider_id'] ) ) {
+			return __( 'Illegal Shortcode Parameters Detected', 'wprtc_assignment_2a' );
+		}
+
+		$slider_images = get_post_meta( $args['slider_id'], '_wprtc_slideshow_slides' );
+		ob_start();
+
+		echo '<div class="flexslider">';
+		if ( ! empty( $slider_images ) ) {
+			echo '<ul class="slides">';
+			$slider_images = $slider_images[0];
+			foreach ( $slider_images as $slide_order => $slide_atachment_id ) {
+				echo "<li>
+						 		<img class='' src='" . wp_get_attachment_url( $slide_atachment_id ) . "'/>
+						 </li>";
+			}
+		} else {
+			_e( 'Sliders Not Found. Please Add atleast one slider.', 'wprtc_assignment_2a' );
+		}
+		echo '</div>';
+		return ob_get_clean();
+	}
 }
 
 new Wp_Rtcamp_Assignment_2a();
