@@ -49,6 +49,7 @@ class Wp_Rtcamp_Assignment_2a {
 		// Attach hook for adding Custom Column to wprtc_slideshow CPT.
 		add_filter( 'manage_posts_columns', array( $this, 'wprtc_slideshow_cpt_table_columns_title' ) );
 		add_action( 'manage_posts_custom_column', array( $this, 'wprtc_slideshow_cpt_table_columns_content' ), 10, 2 );
+		add_action( 'add_meta_boxes',array( $this, 'wprtc_setup_slideshow_metaboxes' ) );
 	}
 
 	/**
@@ -80,7 +81,7 @@ class Wp_Rtcamp_Assignment_2a {
 				'description'         => __( 'rtCamp Slideshow', 'wprtc_assignment_2a' ),
 				'labels'              => $labels,
 				'supports'            => array( 'title' ),
-				'register_meta_box_cb' => array( $this, 'wprtc_setup_slideshow_metaboxes' ),
+				//'register_meta_box_cb' => array( $this, 'wprtc_setup_slideshow_metaboxes' ),
 				'hierarchical'        => false,
 				'public'              => true,
 				'show_ui'             => true,
@@ -92,7 +93,6 @@ class Wp_Rtcamp_Assignment_2a {
 				'exclude_from_search' => true,
 				'publicly_queryable'  => true,
 			);
-
 			register_post_type( 'wprtc_slideshow' , $args );
 	}
 
@@ -176,7 +176,8 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function wprtc_setup_slideshow_metaboxes() {
-		add_meta_box( 'wprtc_slideshow',  __( 'Add Slides', 'wprtc_assignment_2a' ), array( $this, 'wprtc_render_slideshow_metaboxes' ), 'wprtc_slideshow', 'normal', 'default' );
+		add_meta_box( 'wprtc_slideshow_sliders',  __( 'Add Slides', 'wprtc_assignment_2a' ), array( $this, 'wprtc_render_slideshow_slides_metabox' ), 'wprtc_slideshow', 'normal', 'low' );
+		add_meta_box( 'wprtc_slideshow_settings',  __( 'Add Slider Settings', 'wprtc_assignment_2a' ), array( $this, 'wprtc_render_slideshow_settings_metabox' ), 'wprtc_slideshow', 'side', 'low' );
 	}
 
 	/**
@@ -184,7 +185,7 @@ class Wp_Rtcamp_Assignment_2a {
 	 *
 	 * @since 0.1
 	 */
-	public function wprtc_render_slideshow_metaboxes() {
+	public function wprtc_render_slideshow_slides_metabox() {
 		global $post;
 		wp_enqueue_media();
 		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'post',
@@ -211,6 +212,41 @@ class Wp_Rtcamp_Assignment_2a {
 		ob_get_flush();
 	}
 
+
+	/**
+	 * Render Settings Metabox for CPT 'wprtc_slideshow'
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_render_slideshow_settings_metabox() {
+		global $post;
+		$animation_type = '';
+		$animation_speed = '';
+		$slider_settings = get_post_meta( $post->ID, '_wprtc_slideshow_settings' );
+		$animation = '';
+		ob_start();
+		echo "<div class='wprtc_slideshow_settings_wrapper'>";
+		if ( ! empty( $slider_settings ) ) {
+			$slider_settings = $slider_settings[0];
+			$animation_type  = isset( $slider_settings['animation_type'] ) ? sanitize_text_field( $slider_settings['animation_type'] ) : '';
+			$animation_speed  = isset( $slider_settings['animation_speed'] ) ? sanitize_text_field( $slider_settings['animation_speed'] ) : '';
+		}
+		echo "<div>
+						<label for='_wprtc_slider_settings[animation_type]'>Animation Type (Fade/Slide)</label>
+						<br/>
+						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='_wprtc_animation_type_fade'" . checked( $animation_type, '_wprtc_animation_type_fade', false ) . "'>Fade
+						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='_wprtc_animation_type_slide'" . checked( $animation_type, '_wprtc_animation_type_slide', false ) . "'>Slide
+					</div>
+						<br/>
+					<div>
+						<label for='_wprtc_slider_settings[animation_speed]'>Animation speed</label>
+						<br/>
+						<input type='text' name='_wprtc_slider_settings[animation_speed]' value='" . esc_html( $animation_speed ) . "'>
+					</div>";
+		echo '</div>';
+		ob_get_flush();
+	}
+
 	/**
 	 * 'save_post' callback for saving Slides.
 	 *
@@ -221,7 +257,7 @@ class Wp_Rtcamp_Assignment_2a {
 	public function wprtc_save_slides( $post_id ) {
 		global $post;
 		$wprtc_slides = array();
-
+		$wprtc_slider_settings = array();
 		// If doing auto save return.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
@@ -239,19 +275,33 @@ class Wp_Rtcamp_Assignment_2a {
 
 		foreach ( $_POST as $post_key => $post_value ) {
 			// $key is input hidden , $value is attachment id
-			if ( strpos( $post_key, 'wprtc_' ) !== false ) {
+			if ( strpos( $post_key, 'wprtc_slide_order' ) !== false ) {
 				$wprtc_slides = $post_value;
-
+				// Build Slides array to save in to post meta.
 				array_walk( $wprtc_slides, function( &$wprtc_value, &$wprtc_key ) {
 						$wprtc_slides[ $wprtc_key ] = $wprtc_value;
 				});
+				// Update Slides.
+				update_post_meta( $post_id, '_wprtc_slideshow_slides', $wprtc_slides );
+
+			} elseif ( strpos( $post_key, '_wprtc_slider_settings' ) !== false ) {
+
+				$wprtc_slider_settings = $post_value;
+				// Build settings array to save in to post meta.
+				array_walk( $wprtc_slider_settings, function( &$wprtc_settings_value, &$wprtc_settings_key ) {
+						$wprtc_slider_settings[ $wprtc_settings_key ] = $wprtc_settings_value;
+				});
+				// Update Slider Settings.
+				update_post_meta( $post_id, '_wprtc_slideshow_settings', $wprtc_slider_settings );
+
 			}
 		}
-		update_post_meta( $post_id, '_wprtc_slideshow_slides', $wprtc_slides );
+
 	}
 
 	/**
-	 * Call back function for [wprtc_slideshow slider_id=1] shortcode
+	 * Call back function for [wprtc_slideshow] shortcode
+	 * Usage : [wprtc_slideshow slider_id=1].
 	 *
 	 * @param int $args shortcode args.
 	 *
