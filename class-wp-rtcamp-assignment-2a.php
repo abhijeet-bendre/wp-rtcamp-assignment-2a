@@ -336,18 +336,21 @@ class Wp_Rtcamp_Assignment_2a {
 		// Extract shorcode atts.
 		shortcode_atts( array( 'slider_id' => 0 ), $args , 'wprtc_slideshow' );
 
-		if ( ! isset( $args['slider_id'] ) ) {
-			return __( 'Illegal shortcode parameters detected !', 'wprtc_assignment_2a' );
+		if ( ! isset( $args['slider_id'] ) || 0 === $args['slider_id'] ) {
+			return '<div class="wprtc_general_error">' .
+								__( 'Illegal shortcode parameters detected. !', 'wprtc_assignment_2a' ) .
+							'</div>';
 		}
 
 		$slider_images = get_post_meta( (int) $args['slider_id'], '_wprtc_slideshow_slides' );
 		$slider_settings = get_post_meta( (int) $args['slider_id'], '_wprtc_slideshow_settings' );
+		$post_status = get_post_status( $args['slider_id'] );
 
 		ob_start();
-
+		//var_dump( $slider_images );
 		echo '<div class="flexslider">';
-		if ( ! empty( $slider_images ) ) {
-			$slider_settings = $slider_settings[0];
+		if ( ! empty( $slider_images ) && 'publish' === $post_status ) {
+			$slider_settings = isset( $slider_settings[0] ) ? $slider_settings[0] : '';
 			$slider_images = $slider_images[0];
 
 			echo '<ul class="slides">';
@@ -356,10 +359,11 @@ class Wp_Rtcamp_Assignment_2a {
 						 		<img class='' src='" . wp_get_attachment_url( $slide_atachment_id ) . "'/>
 						 </li>";
 			}
+			echo '</ul>';
 		} else {
-			echo '<div class="wprtc_general_info">' .
-				__( 'Slider not Found !', 'wprtc_assignment_2a' )
-			. '</div>';
+			echo '<div class="wprtc_general_error">' .
+				__( 'Slider not Found. !', 'wprtc_assignment_2a' ) .
+			'</div>';
 		}
 		echo '</div>';
 		?>
@@ -367,7 +371,7 @@ class Wp_Rtcamp_Assignment_2a {
 			jQuery(document).ready(function(){
 				// Hook up the flexslider
 				jQuery('.flexslider').flexslider({
-					animation: <?php echo isset( $slider_settings['animation_type'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_type'] ) ) : 'fade'; ?>,
+					animation: <?php echo isset( $slider_settings['animation_type'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_type'] ) ) : json_encode( 'fade' ); ?>,
 					animationSpeed: <?php echo isset( $slider_settings['animation_speed'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_speed'] ), JSON_NUMERIC_CHECK ) : 600; ?>,
 					animationLoop: <?php echo isset( $slider_settings['animation_loop'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_loop'] ) ) : 'false'; ?>,
 					randomize: <?php echo isset( $slider_settings['randomize'] ) ? json_encode( sanitize_text_field( $slider_settings['randomize'] ) ) : 'false'; ?>,
