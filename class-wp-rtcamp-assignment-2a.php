@@ -174,10 +174,11 @@ class Wp_Rtcamp_Assignment_2a {
 	public function wprtc_setup_slideshow_metaboxes() {
 		add_meta_box( 'wprtc_slideshow_sliders',  __( 'Add Slides', 'wprtc_assignment_2a' ), array( $this, 'wprtc_render_slideshow_slides_metabox' ), 'wprtc_slideshow', 'normal', 'low' );
 		add_meta_box( 'wprtc_slideshow_settings',  __( 'Add Slider Settings', 'wprtc_assignment_2a' ), array( $this, 'wprtc_render_slideshow_settings_metabox' ), 'wprtc_slideshow', 'side', 'low' );
+		add_meta_box( 'wprtc_slideshow_shortcode',  __( 'Copy Shortcode', 'wprtc_assignment_2a' ), array( $this, 'wprtc_render_slideshow_shortcode_metabox' ), 'wprtc_slideshow', 'side', 'low' );
 	}
 
 	/**
-	 * Render Metaboxes for CPT 'wprtc_slideshow'
+	 * Render Metabox for CPT 'wprtc_slideshow'
 	 *
 	 * @since 0.1
 	 */
@@ -208,7 +209,6 @@ class Wp_Rtcamp_Assignment_2a {
 		ob_get_flush();
 	}
 
-
 	/**
 	 * Render Settings Metabox for CPT 'wprtc_slideshow'
 	 *
@@ -220,26 +220,53 @@ class Wp_Rtcamp_Assignment_2a {
 		$animation_speed = '';
 		$slider_settings = get_post_meta( $post->ID, '_wprtc_slideshow_settings' );
 		$animation = '';
+		//var_dump($slider_settings);
 		ob_start();
 		echo "<div class='wprtc_slideshow_settings_wrapper'>";
 		if ( ! empty( $slider_settings ) ) {
 			$slider_settings = $slider_settings[0];
 			$animation_type  = isset( $slider_settings['animation_type'] ) ? sanitize_text_field( $slider_settings['animation_type'] ) : '';
 			$animation_speed  = isset( $slider_settings['animation_speed'] ) ? sanitize_text_field( $slider_settings['animation_speed'] ) : '';
+			$animation_loop  = isset( $slider_settings['animation_loop'] ) ? sanitize_text_field( $slider_settings['animation_loop'] ) : '';
+			$randomize  = isset( $slider_settings['randomize'] ) ? sanitize_text_field( $slider_settings['randomize'] ) : '';
+			$slideshow_speed  = isset( $slider_settings['slideshow_speed'] ) ? sanitize_text_field( $slider_settings['slideshow_speed'] ) : '';
 		}
-		echo "<div>
-						<label for='_wprtc_slider_settings[animation_type]'>Animation Type</label>
-						<br/>
-						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='_wprtc_animation_type_fade'" . checked( $animation_type, '_wprtc_animation_type_fade', false ) . "'>Fade
-						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='_wprtc_animation_type_slide'" . checked( $animation_type, '_wprtc_animation_type_slide', false ) . "'>Slide
+		echo "<div class='wprtc_slideshow_setting'>
+						<label for='_wprtc_slider_settings[animation_type]'>Animation Type:</label>
+						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='fade' " . checked( $animation_type, 'fade', false ) . "'>Fade
+						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='slide' " . checked( $animation_type, 'slide', false ) . "'>Slide
 					</div>
-						<br/>
-					<div>
-						<label for='_wprtc_slider_settings[animation_speed]'>Animation speed</label>
-						<br/>
+					<div class='wprtc_slideshow_setting'>
+						<label for='_wprtc_slider_settings[animation_speed]'>Animation Speed:</label>
 						<input type='text' name='_wprtc_slider_settings[animation_speed]' value='" . esc_html( $animation_speed ) . "'>
+					</div>
+					<div class='wprtc_slideshow_setting'>
+						<label for='_wprtc_slider_settings[animation_loop]'>Animation Loop:</label>
+						<input type='checkbox' name='_wprtc_slider_settings[animation_loop]' value='true' " . checked( $animation_loop, 'true', false ) . ">
+					</div>
+					<div class='wprtc_slideshow_setting'>
+						<label for='_wprtc_slider_settings[randomize]'>Randomize slide order:</label>
+						<input type='checkbox' name='_wprtc_slider_settings[randomize]' value='true' " . checked( $randomize, 'true', false ) . ">
+					</div>
+					<div class='wprtc_slideshow_setting'>
+						<label for='_wprtc_slider_settings[slideshow_speed]'>SlideShow Speed:</label>
+						<input type='text' name='_wprtc_slider_settings[slideshow_speed]' value='" . esc_html( $slideshow_speed ) . "'>
+					</div>
+		</div>";
+		ob_get_flush();
+	}
+
+	/**
+	 * Render Metabox for displaying shortcode to copy on post/page
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_render_slideshow_shortcode_metabox() {
+		global $post;
+		ob_start();
+		echo "<div>
+						[wprtc_slideshow slider_id={$post->ID}]
 					</div>";
-		echo '</div>';
 		ob_get_flush();
 	}
 
@@ -265,10 +292,6 @@ class Wp_Rtcamp_Assignment_2a {
 				return;
 			}
 		}
-
-		$output = print_r( $_POST, true );
-		file_put_contents( 'file.txt', $output );
-
 		foreach ( $_POST as $post_key => $post_value ) {
 			// $key is input hidden , $value is attachment id
 			if ( strpos( $post_key, 'wprtc_slide_order' ) !== false ) {
@@ -289,10 +312,8 @@ class Wp_Rtcamp_Assignment_2a {
 				});
 				// Update Slider Settings.
 				update_post_meta( $post_id, '_wprtc_slideshow_settings', $wprtc_slider_settings );
-
 			}
 		}
-
 	}
 
 	/**
@@ -318,7 +339,6 @@ class Wp_Rtcamp_Assignment_2a {
 		$slider_images = get_post_meta( $args['slider_id'], '_wprtc_slideshow_slides' );
 		$slider_settings = get_post_meta( $args['slider_id'], '_wprtc_slideshow_settings' );
 		$slider_settings = $slider_settings[0];
-		var_dump($slider_settings);
 		ob_start();
 
 		echo '<div class="flexslider">';
@@ -338,12 +358,13 @@ class Wp_Rtcamp_Assignment_2a {
 		<script type="text/javascript">
 			jQuery(document).ready(function(){
 				// Hook up the flexslider
-				//var slider_fade =
 				jQuery('.flexslider').flexslider({
 					animation: <?php echo isset( $slider_settings['animation_type'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_type'] ) ) : 'fade'; ?>,
-					animationSpeed: <?php echo isset( $slider_settings['animation_speed'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_speed'] ) ) : '600'; ?>,
+					animationSpeed: <?php echo isset( $slider_settings['animation_speed'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_speed'] ), JSON_NUMERIC_CHECK ) : 600; ?>,
+					animationLoop: <?php echo isset( $slider_settings['animation_loop'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_loop'] ) ) : 'false'; ?>,
+					randomize: <?php echo isset( $slider_settings['randomize'] ) ? json_encode( sanitize_text_field( $slider_settings['randomize'] ) ) : 'false'; ?>,
+					slideshowSpeed: <?php echo isset( $slider_settings['slideshow_speed'] ) ? json_encode( sanitize_text_field( $slider_settings['slideshow_speed'] ), JSON_NUMERIC_CHECK ) : 7000; ?>,
 					direction: "horizontal",
-					slideshowSpeed: 7000,
 				});
 			});
 		</script>
