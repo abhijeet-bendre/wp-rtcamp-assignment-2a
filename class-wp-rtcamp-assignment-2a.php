@@ -130,8 +130,8 @@ class Wp_Rtcamp_Assignment_2a {
 		}
 
 		// Register and Enqueue Style slideshow frontend js.
-		wp_register_script( 'wprtc_slideshow_frontend_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_frontend_2a.js' );
-		wp_enqueue_script( 'wprtc_slideshow_frontend_2a_js', array( 'jquery' ) );
+		//wp_register_script( 'wprtc_slideshow_frontend_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_frontend_2a.js' );
+		//wp_enqueue_script( 'wprtc_slideshow_frontend_2a_js', array( 'jquery' ) );
 
 		// Register and Enqueue flexslider_script only if its not previously enqueued.
 		if ( ! wp_script_is( 'flexslider_script', 'enqueued' ) ) {
@@ -232,7 +232,7 @@ class Wp_Rtcamp_Assignment_2a {
 			$animation_speed  = isset( $slider_settings['animation_speed'] ) ? sanitize_text_field( $slider_settings['animation_speed'] ) : '';
 		}
 		echo "<div>
-						<label for='_wprtc_slider_settings[animation_type]'>Animation Type (Fade/Slide)</label>
+						<label for='_wprtc_slider_settings[animation_type]'>Animation Type</label>
 						<br/>
 						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='_wprtc_animation_type_fade'" . checked( $animation_type, '_wprtc_animation_type_fade', false ) . "'>Fade
 						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='_wprtc_animation_type_slide'" . checked( $animation_type, '_wprtc_animation_type_slide', false ) . "'>Slide
@@ -316,10 +316,13 @@ class Wp_Rtcamp_Assignment_2a {
 		shortcode_atts( array(), $args , 'wprtc_slideshow' );
 
 		if ( ! isset( $args['slider_id'] ) ) {
-			return __( 'Illegal Shortcode Parameters Detected', 'wprtc_assignment_2a' );
+			return __( 'Illegal shortcode parameters detected !', 'wprtc_assignment_2a' );
 		}
 
 		$slider_images = get_post_meta( $args['slider_id'], '_wprtc_slideshow_slides' );
+		$slider_settings = get_post_meta( $args['slider_id'], '_wprtc_slideshow_settings' );
+		$slider_settings = $slider_settings[0];
+		var_dump($slider_settings);
 		ob_start();
 
 		echo '<div class="flexslider">';
@@ -332,9 +335,23 @@ class Wp_Rtcamp_Assignment_2a {
 						 </li>";
 			}
 		} else {
-			_e( 'Sliders Not Found. Please Add atleast one slider.', 'wprtc_assignment_2a' );
+			_e( 'Sliders not Found. Please add atleast one slider.', 'wprtc_assignment_2a' );
 		}
 		echo '</div>';
+		?>
+		<script type="text/javascript">
+			jQuery(document).ready(function(){
+				// Hook up the flexslider
+				//var slider_fade =
+				jQuery('.flexslider').flexslider({
+					animation: <?php echo isset( $slider_settings['animation_type'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_type'] ) ) : 'fade'; ?>,
+					animationSpeed: <?php echo isset( $slider_settings['animation_speed'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_speed'] ) ) : '600'; ?>,
+					direction: "horizontal",
+					slideshowSpeed: 7000,
+				});
+			});
+		</script>
+		<?php
 		return ob_get_clean();
 	}
 }
