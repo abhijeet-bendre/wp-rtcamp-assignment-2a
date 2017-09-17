@@ -129,6 +129,10 @@ class Wp_Rtcamp_Assignment_2a {
 			$registered  = wp_enqueue_style( 'flexslider_style' );
 		}
 
+		// Register and Enqueue Style.
+		wp_register_style( 'wprtc_slideshow_front_end_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_front_end_2a.css', null );
+		wp_enqueue_style( 'wprtc_slideshow_front_end_2a_css' );
+
 		// Register and Enqueue flexslider_script only if its not previously enqueued.
 		if ( ! wp_script_is( 'flexslider_script', 'enqueued' ) ) {
 			wp_register_script( 'flexslider_script', plugin_dir_url( __FILE__ ) . 'assets/js/lib/jquery.flexslider-min.js' );
@@ -330,28 +334,32 @@ class Wp_Rtcamp_Assignment_2a {
 		$args = array_change_key_case( (array) $args, CASE_LOWER );
 
 		// Extract shorcode atts.
-		shortcode_atts( array(), $args , 'wprtc_slideshow' );
+		shortcode_atts( array( 'slider_id' => 0 ), $args , 'wprtc_slideshow' );
 
 		if ( ! isset( $args['slider_id'] ) ) {
 			return __( 'Illegal shortcode parameters detected !', 'wprtc_assignment_2a' );
 		}
 
-		$slider_images = get_post_meta( $args['slider_id'], '_wprtc_slideshow_slides' );
-		$slider_settings = get_post_meta( $args['slider_id'], '_wprtc_slideshow_settings' );
-		$slider_settings = $slider_settings[0];
+		$slider_images = get_post_meta( (int) $args['slider_id'], '_wprtc_slideshow_slides' );
+		$slider_settings = get_post_meta( (int) $args['slider_id'], '_wprtc_slideshow_settings' );
+
 		ob_start();
 
 		echo '<div class="flexslider">';
 		if ( ! empty( $slider_images ) ) {
-			echo '<ul class="slides">';
+			$slider_settings = $slider_settings[0];
 			$slider_images = $slider_images[0];
+
+			echo '<ul class="slides">';
 			foreach ( $slider_images as $slide_order => $slide_atachment_id ) {
 				echo "<li>
 						 		<img class='' src='" . wp_get_attachment_url( $slide_atachment_id ) . "'/>
 						 </li>";
 			}
 		} else {
-			_e( 'Sliders not Found. Please add atleast one slider.', 'wprtc_assignment_2a' );
+			echo '<div class="wprtc_general_info">' .
+				__( 'Slider not Found !', 'wprtc_assignment_2a' )
+			. '</div>';
 		}
 		echo '</div>';
 		?>

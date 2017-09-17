@@ -1,25 +1,23 @@
 .wprtc_general_info {
-  border: 1px solid #a2bc13;
-  background-color: #f9fde8;
+  border-left: 5px solid;
+  border-right: 1px solid;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: #46b450;
+  background-color: #eee;
   padding: 10px;
   color: #212121;
   border-radius: 2px;
   margin-bottom: 10px;
 }
 
-.wprtc_general_description
-{
-  border: 1px solid #958fcb;
-  background-color: #d2d3f2;
-  padding: 10px;
-  color: #212121;
-  border-radius: 2px;
-  margin-bottom: 10px;
-}
-
-..wprtc_general_error {
-  border: 1px solid red;
-  background-color: #d2d3f2;
+.wprtc_general_error {
+  border-left: 5px solid;
+  border-right: 1px solid;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: red;
+  background-color: #eee;
   padding: 10px;
   color: #212121;
   border-radius: 2px;
