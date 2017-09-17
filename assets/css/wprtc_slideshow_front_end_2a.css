@@ -1,0 +1,27 @@
+.wprtc_general_info {
+  border: 1px solid #a2bc13;
+  background-color: #f9fde8;
+  padding: 10px;
+  color: #212121;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+.wprtc_general_description
+{
+  border: 1px solid #958fcb;
+  background-color: #d2d3f2;
+  padding: 10px;
+  color: #212121;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+..wprtc_general_error {
+  border: 1px solid red;
+  background-color: #d2d3f2;
+  padding: 10px;
+  color: #212121;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
