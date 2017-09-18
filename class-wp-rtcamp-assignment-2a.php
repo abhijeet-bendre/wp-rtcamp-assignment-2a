@@ -91,7 +91,7 @@ class Wp_Rtcamp_Assignment_2a {
 				'can_export'          => true,
 				'has_archive'         => true,
 				'exclude_from_search' => true,
-				'publicly_queryable'  => true,
+				'publicly_queryable'  => false, // Hide  Preview changes button and view post type link.
 			);
 			register_post_type( 'wprtc_slideshow' , $args );
 	}
@@ -229,12 +229,13 @@ class Wp_Rtcamp_Assignment_2a {
 		echo "<div class='wprtc_slideshow_settings_wrapper'>";
 		if ( ! empty( $slider_settings ) ) {
 			$slider_settings = $slider_settings[0];
-			$animation_type  = isset( $slider_settings['animation_type'] ) ? sanitize_text_field( $slider_settings['animation_type'] ) : '';
-			$animation_speed  = isset( $slider_settings['animation_speed'] ) ? sanitize_text_field( $slider_settings['animation_speed'] ) : '';
-			$animation_loop  = isset( $slider_settings['animation_loop'] ) ? sanitize_text_field( $slider_settings['animation_loop'] ) : '';
-			$randomize  = isset( $slider_settings['randomize'] ) ? sanitize_text_field( $slider_settings['randomize'] ) : '';
-			$slideshow_speed  = isset( $slider_settings['slideshow_speed'] ) ? sanitize_text_field( $slider_settings['slideshow_speed'] ) : '';
 		}
+		$animation_type  = isset( $slider_settings['animation_type'] ) ? sanitize_text_field( $slider_settings['animation_type'] ) : '';
+		$animation_speed  = isset( $slider_settings['animation_speed'] ) ? sanitize_text_field( $slider_settings['animation_speed'] ) : '';
+		$animation_loop  = isset( $slider_settings['animation_loop'] ) ? sanitize_text_field( $slider_settings['animation_loop'] ) : '';
+		$randomize  = isset( $slider_settings['randomize'] ) ? sanitize_text_field( $slider_settings['randomize'] ) : '';
+		$slideshow_speed  = isset( $slider_settings['slideshow_speed'] ) ? sanitize_text_field( $slider_settings['slideshow_speed'] ) : '';
+
 		echo "<div class='wprtc_slideshow_setting'>
 						<label for='_wprtc_slider_settings[animation_type]'>Animation Type:</label>
 						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='fade' " . checked( $animation_type, 'fade', false ) . "'>Fade
