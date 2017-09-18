@@ -27,8 +27,8 @@ From here: https://careers.rtcamp.com/wordpress-engineer/assignment/
     slide show of images uploaded from admin-side.
 
 ### Libraries Used:
-1.FlexSlider https://woocommerce.com/flexslider/
-2. jQuery Sortable 
+1. [FlexSlider](https://woocommerce.com/flexslider/).
+2. [jQuery Sortable](http://jqueryui.com/sortable/)
 
 ### Installation:
 
