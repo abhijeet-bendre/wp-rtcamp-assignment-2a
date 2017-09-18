@@ -26,14 +26,18 @@ From here: https://careers.rtcamp.com/wordpress-engineer/assignment/
     When you add shortcode [wprtc_slideshow slider_id=id] to any post/page, it will be replaced by a
     slide show of images uploaded from admin-side.
 
-== Installation ==
+### Libraries Used:
+1.FlexSlider https://woocommerce.com/flexslider/
+2. jQuery Sortable 
+
+### Installation:
 
 1. Upload the entire `wp-rtcamp-assignment-2a` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the `Plugins` menu in WordPress.
 3. You will find **rtCamp Slideshow** menu in your WordPress admin panel.
 
 
-== Changelog ==
+### Changelog
 
 #### 0.1 ####
 * First Version
