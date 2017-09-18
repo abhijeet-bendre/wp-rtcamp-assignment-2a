@@ -102,17 +102,22 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function wprtc_init_assets() {
-		// Register and Enqueue Style.
-		wp_register_style( 'wprtc_slideshow_main_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_main_2a.css', null );
-		wp_enqueue_style( 'wprtc_slideshow_main_2a_css' );
+		global $pagenow;
 
-		// Register and Enqueue Script.
-		wp_register_script( 'wprtc_slideshow_main_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js' );
-		wp_enqueue_script( 'wprtc_slideshow_main_2a_js', array( 'jquery' ) );
-		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+		// Register and Enqueue Style/Scripts only on 'wprtc_slideshow' post type.
+		if ( isset( $_GET['post_type'] ) && 'wprtc_slideshow' === $_GET['post_type'] && in_array( $pagenow, array( 'post-new.php', 'edit.php' ) ) ) {
+			// Register and Enqueue Style.
+			wp_register_style( 'wprtc_slideshow_main_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_main_2a.css', null );
+			wp_enqueue_style( 'wprtc_slideshow_main_2a_css' );
 
-		if ( ! wp_script_is( 'jquery-ui', 'enqueued' ) ) {
-			wp_enqueue_script( 'jquery-ui' );
+			// Register and Enqueue Script.
+			wp_register_script( 'wprtc_slideshow_main_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js' );
+			wp_enqueue_script( 'wprtc_slideshow_main_2a_js', array( 'jquery' ) );
+			wp_localize_script( 'wprtc_slideshow_main_2a_js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+
+			if ( ! wp_script_is( 'jquery-ui', 'enqueued' ) ) {
+				wp_enqueue_script( 'jquery-ui' );
+			}
 		}
 	}
 
