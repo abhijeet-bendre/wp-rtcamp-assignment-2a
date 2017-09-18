@@ -43,13 +43,8 @@ class Wp_Rtcamp_Assignment_2a {
 		add_action( 'init', array( $this, 'wprtc_register_rtcamp_slideshow_post_type' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprtc_init_front_end_assets' ) );
-		add_action( 'save_post', array( $this, 'wprtc_save_slides' ), 10 );
 		add_shortcode( 'wprtc_slideshow', array( $this, 'wprtc_slideshow' ) );
-
-		// Attach hook for adding Custom Column to wprtc_slideshow CPT.
-		add_filter( 'manage_posts_columns', array( $this, 'wprtc_slideshow_cpt_table_columns_title' ) );
-		add_action( 'manage_posts_custom_column', array( $this, 'wprtc_slideshow_cpt_table_columns_content' ), 10, 2 );
-		add_action( 'add_meta_boxes',array( $this, 'wprtc_setup_slideshow_metaboxes' ) );
+		add_action( 'admin_menu', array( $this, 'wprtc_hide_wprtc_slideshow_cpt_menu' ) );
 	}
 
 	/**
@@ -81,7 +76,7 @@ class Wp_Rtcamp_Assignment_2a {
 				'description'         => __( 'rtCamp Slideshow', 'wprtc_assignment_2a' ),
 				'labels'              => $labels,
 				'supports'            => array( 'title' ),
-				//'register_meta_box_cb' => array( $this, 'wprtc_setup_slideshow_metaboxes' ),
+				'register_meta_box_cb' => array( $this, 'wprtc_setup_slideshow_metaboxes' ),
 				'hierarchical'        => false,
 				'public'              => true,
 				'show_ui'             => true,
@@ -94,6 +89,13 @@ class Wp_Rtcamp_Assignment_2a {
 				'publicly_queryable'  => false, // Hide  Preview changes button and view post type link.
 			);
 			register_post_type( 'wprtc_slideshow' , $args );
+
+			// Attach hook for adding Custom Column to wprtc_slideshow CPT.
+			add_filter( 'manage_posts_columns', array( $this, 'wprtc_slideshow_cpt_table_columns_title' ) );
+			add_action( 'manage_posts_custom_column', array( $this, 'wprtc_slideshow_cpt_table_columns_content' ), 10, 2 );
+
+			// 'save_post' callback for saving Slides.
+			add_action( 'save_post', array( $this, 'wprtc_save_slides' ), 10 );
 	}
 
 	/**
@@ -105,7 +107,13 @@ class Wp_Rtcamp_Assignment_2a {
 		global $pagenow;
 
 		// Register and Enqueue Style/Scripts only on 'wprtc_slideshow' post type.
-		if ( isset( $_GET['post_type'] ) && 'wprtc_slideshow' === $_GET['post_type'] && in_array( $pagenow, array( 'post-new.php', 'edit.php' ) ) ) {
+		if (
+				// Check if $_GET['post_type'] exists. For "All sliders/ Add new" screen .
+				( ( isset( $_GET['post_type'] ) && 'wprtc_slideshow' === $_GET['post_type'] ) && in_array( $pagenow, array( 'post-new.php', 'edit.php' ) ) )
+				||
+				// Check if $_GET['post'] exists. (For Edit Slider Screen).
+				( 'post.php' === $pagenow && isset( $_GET['post'] ) && 'wprtc_slideshow' === get_post_type( $_GET['post'] ) )
+			) {
 			// Register and Enqueue Style.
 			wp_register_style( 'wprtc_slideshow_main_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_main_2a.css', null );
 			wp_enqueue_style( 'wprtc_slideshow_main_2a_css' );
@@ -142,6 +150,17 @@ class Wp_Rtcamp_Assignment_2a {
 		if ( ! wp_script_is( 'flexslider_script', 'enqueued' ) ) {
 			wp_register_script( 'flexslider_script', plugin_dir_url( __FILE__ ) . 'assets/js/lib/jquery.flexslider-min.js' );
 			wp_enqueue_script( 'flexslider_script', array( 'jquery' ) );
+		}
+	}
+
+	/**
+	 * Hide 'wprtc_slideshow' CPT menu for users who don't have 'upload_files' capability.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_hide_wprtc_slideshow_cpt_menu() {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			remove_menu_page( 'edit.php?post_type=wprtc_slideshow' );
 		}
 	}
 
