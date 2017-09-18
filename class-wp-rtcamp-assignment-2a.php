@@ -82,6 +82,7 @@ class Wp_Rtcamp_Assignment_2a {
 				'show_ui'             => true,
 				'show_in_menu'        => true,
 				'menu_position'       => 5,
+				'menu_icon'            => 'dashicons-slides',
 				'show_in_admin_bar'   => true,
 				'can_export'          => true,
 				'has_archive'         => true,
