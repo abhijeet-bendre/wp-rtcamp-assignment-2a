@@ -107,13 +107,19 @@ class Wp_Rtcamp_Assignment_2a {
 	public function wprtc_init_assets() {
 		global $pagenow;
 
-		// Register and Enqueue Style/Scripts only on 'wprtc_slideshow' post type.
-		if (
-				// Check if $_GET['post_type'] exists. For "All sliders/ Add new" screen .
-				( ( isset( $_GET['post_type'] ) && 'wprtc_slideshow' === $_GET['post_type'] ) && in_array( $pagenow, array( 'post-new.php', 'edit.php' ) ) )
+		/*
+		 * Register and Enqueue Style/Scripts only on 'wprtc_slideshow' post type.
+		 *
+		 * Check if $_GET['post_type'] exists. For "All sliders/ Add new" screen .
+		 *	or
+		 * Check if $_GET['post'] exists. (For Edit Slider Screen).
+		 */
+		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay.
+		$post_id = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay.
+
+		if ( ( 'wprtc_slideshow' === $post_type && in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) )
 				||
-				// Check if $_GET['post'] exists. (For Edit Slider Screen).
-				( 'post.php' === $pagenow && isset( $_GET['post'] ) && 'wprtc_slideshow' === get_post_type( $_GET['post'] ) )
+				( 'post.php' === $pagenow && 'wprtc_slideshow' === get_post_type( $post_id ) )
 			) {
 			// Register and Enqueue Style.
 			wp_register_style( 'wprtc_slideshow_main_2a_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_slideshow_main_2a.css', null );
@@ -173,8 +179,8 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function wprtc_slideshow_cpt_table_columns_title( $defaults ) {
-		$post_type = $_GET['post_type'];
-		if ( isset( $post_type ) == true && 'wprtc_slideshow' === $post_type ) {
+		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay.
+		if ( 'wprtc_slideshow' === $post_type ) {
 			 $defaults['wprtc_slideshow_shortcode'] = 'Shortcode';
 		}
 		return $defaults;
@@ -191,7 +197,7 @@ class Wp_Rtcamp_Assignment_2a {
 	 */
 	public function wprtc_slideshow_cpt_table_columns_content( $column_name, $slider_id ) {
 		if ( 'wprtc_slideshow_shortcode' === $column_name ) {
-			echo '[wprtc_slideshow slider_id=' . $slider_id . ']';
+			echo '[wprtc_slideshow slider_id=' . esc_attr( $slider_id ) . ']';
 		}
 	}
 
@@ -226,14 +232,14 @@ class Wp_Rtcamp_Assignment_2a {
 			$slider_images = $slider_images[0];
 			foreach ( $slider_images as $slide_order => $slide_atachment_id ) {
 				echo "<div class='wprtc_image_preview_wrapper'>
-			 					<img class='wprtc_image_preview' src='" . wp_get_attachment_url( $slide_atachment_id ) . "' height='150'>
-			 					<input type='hidden' name='wprtc_slide_order[" . $slide_order . "]' value='" . $slide_atachment_id . "'>
+			 					<img class='wprtc_image_preview' src='" . esc_url( wp_get_attachment_url( $slide_atachment_id ) ) . "' height='150'>
+			 					<input type='hidden' name='wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . "'>
 			 				</div>";
 			}
 		}
 		echo '</div>';
 		echo "<div class='wprtc_button_wrapper'>
-						<input id='wprtc_add_new_slide' type='button upload_image_button' class='button' value='" . __( 'Add New Slide', 'wprtc_assignment_2a' ) . "'/>
+						<input id='wprtc_add_new_slide' type='button upload_image_button' class='button' value='" . esc_html__( 'Add New Slide', 'wprtc_assignment_2a' ) . "'/>
 					</div>";
 		ob_get_flush();
 	}
@@ -249,7 +255,7 @@ class Wp_Rtcamp_Assignment_2a {
 		$animation_speed = '';
 		$slider_settings = get_post_meta( $post->ID, '_wprtc_slideshow_settings' );
 		$animation = '';
-		//var_dump($slider_settings);
+		// var_dump($slider_settings);.
 		ob_start();
 		echo "<div class='wprtc_slideshow_settings_wrapper'>";
 		if ( ! empty( $slider_settings ) ) {
@@ -294,9 +300,9 @@ class Wp_Rtcamp_Assignment_2a {
 	public function wprtc_render_slideshow_shortcode_metabox() {
 		global $post;
 		ob_start();
-		echo "<div>
-						[wprtc_slideshow slider_id={$post->ID}]
-					</div>";
+		echo '<div>
+							[wprtc_slideshow slider_id="' . esc_attr( $post->ID ) . '"]
+					</div>';
 		ob_get_flush();
 	}
 
@@ -317,13 +323,13 @@ class Wp_Rtcamp_Assignment_2a {
 		}
 
 		// Check if valid post_type.
-		if ( isset( $_POST['post_type'] ) ) {
-			if ( 'wprtc_slideshow' !== sanitize_text_field( $_POST['post_type'] ) ) {
+		if ( isset( $_POST['post_type'] ) ) { // Input var okay.
+			if ( 'wprtc_slideshow' !== sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) ) { // Input var okay.
 				return;
 			}
 		}
-		foreach ( $_POST as $post_key => $post_value ) {
-			// $key is input hidden , $value is attachment id
+		foreach ( $_POST as $post_key => $post_value ) { // Input var okay.
+			// $key is input hidden , $value is attachment id.
 			if ( strpos( $post_key, 'wprtc_slide_order' ) !== false ) {
 				$wprtc_slides = $post_value;
 				// Build Slides array to save in to post meta.
@@ -360,11 +366,16 @@ class Wp_Rtcamp_Assignment_2a {
 		$args = array_change_key_case( (array) $args, CASE_LOWER );
 
 		// Extract shorcode atts.
-		shortcode_atts( array( 'slider_id' => 0 ), $args , 'wprtc_slideshow' );
+		shortcode_atts(
+			array(
+				'slider_id' => 0,
+			),
+			$args , 'wprtc_slideshow'
+		);
 
 		if ( ! isset( $args['slider_id'] ) || 0 === $args['slider_id'] ) {
 			return '<div class="wprtc_general_error">' .
-								__( 'Illegal shortcode parameters detected. !', 'wprtc_assignment_2a' ) .
+								esc_html__( 'Illegal shortcode parameters detected. !', 'wprtc_assignment_2a' ) .
 							'</div>';
 		}
 
@@ -373,7 +384,7 @@ class Wp_Rtcamp_Assignment_2a {
 		$post_status = get_post_status( $args['slider_id'] );
 
 		ob_start();
-		//var_dump( $slider_images );
+		// var_dump( $slider_images );.
 		echo '<div class="flexslider">';
 		if ( ! empty( $slider_images ) && 'publish' === $post_status ) {
 			$slider_settings = isset( $slider_settings[0] ) ? $slider_settings[0] : '';
@@ -382,13 +393,13 @@ class Wp_Rtcamp_Assignment_2a {
 			echo '<ul class="slides">';
 			foreach ( $slider_images as $slide_order => $slide_atachment_id ) {
 				echo "<li>
-						 		<img class='' src='" . wp_get_attachment_url( $slide_atachment_id ) . "'/>
+						 		<img class='' src='" . esc_url( wp_get_attachment_url( $slide_atachment_id ) ) . "'/>
 						 </li>";
 			}
 			echo '</ul>';
 		} else {
 			echo '<div class="wprtc_general_error">' .
-				__( 'Slider not Found. !', 'wprtc_assignment_2a' ) .
+				esc_html__( 'Slider not Found. !', 'wprtc_assignment_2a' ) .
 			'</div>';
 		}
 		echo '</div>';
@@ -397,11 +408,11 @@ class Wp_Rtcamp_Assignment_2a {
 			jQuery(document).ready(function(){
 				// Hook up the flexslider
 				jQuery('.flexslider').flexslider({
-					animation: <?php echo isset( $slider_settings['animation_type'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_type'] ) ) : json_encode( 'fade' ); ?>,
-					animationSpeed: <?php echo isset( $slider_settings['animation_speed'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_speed'] ), JSON_NUMERIC_CHECK ) : 600; ?>,
-					animationLoop: <?php echo isset( $slider_settings['animation_loop'] ) ? json_encode( sanitize_text_field( $slider_settings['animation_loop'] ) ) : 'false'; ?>,
-					randomize: <?php echo isset( $slider_settings['randomize'] ) ? json_encode( sanitize_text_field( $slider_settings['randomize'] ) ) : 'false'; ?>,
-					slideshowSpeed: <?php echo isset( $slider_settings['slideshow_speed'] ) ? json_encode( sanitize_text_field( $slider_settings['slideshow_speed'] ), JSON_NUMERIC_CHECK ) : 7000; ?>,
+					animation: <?php echo isset( $slider_settings['animation_type'] ) ? wp_json_encode( sanitize_text_field( $slider_settings['animation_type'] ) ) : wp_json_encode( 'fade' ); ?>,
+					animationSpeed: <?php echo isset( $slider_settings['animation_speed'] ) ? wp_json_encode( sanitize_text_field( $slider_settings['animation_speed'] ), JSON_NUMERIC_CHECK ) : 600; ?>,
+					animationLoop: <?php echo isset( $slider_settings['animation_loop'] ) ? wp_json_encode( sanitize_text_field( $slider_settings['animation_loop'] ) ) : 'false'; ?>,
+					randomize: <?php echo isset( $slider_settings['randomize'] ) ? wp_json_encode( sanitize_text_field( $slider_settings['randomize'] ) ) : 'false'; ?>,
+					slideshowSpeed: <?php echo isset( $slider_settings['slideshow_speed'] ) ? wp_json_encode( sanitize_text_field( $slider_settings['slideshow_speed'] ), JSON_NUMERIC_CHECK ) : 7000; ?>,
 					direction: "horizontal",
 				});
 			});
