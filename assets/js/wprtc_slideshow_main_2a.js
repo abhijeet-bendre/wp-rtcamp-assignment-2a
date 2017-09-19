@@ -1,11 +1,12 @@
 
 jQuery(document).ready(function(){
-
+  'use strict';
+    /*global
+      wp, post
+    */
   jQuery('#wprtc_add_new_slide').on('click', function( event ){
     // Uploading files
     var file_frame;
-    var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
-
     event.preventDefault();
 
     // If the media frame already exists, reopen it.
@@ -32,13 +33,8 @@ jQuery(document).ready(function(){
     // When an image is selected, run a callback.
     file_frame.on( 'select', function() {
       // We set multiple to false so only get one image from the uploader
-      attachment = file_frame.state().get('selection').first().toJSON();
-
-      // Do something with attachment.id and/or attachment.url here
-      //jQuery( '#image-preview' ).attr( 'src', attachment.url ).css( 'width', 'auto' );
-      //jQuery( '#image_attachment_id' ).val( attachment.id );
-      console.log(attachment);
-
+      var attachment = file_frame.state().get('selection').first().toJSON();
+      var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
       var num_of_slides = jQuery('.wprtc_image_preview_wrapper').length;
       num_of_slides =  num_of_slides + 1;
 
@@ -58,25 +54,26 @@ jQuery(document).ready(function(){
 
   // Restore the main ID when the add media button is pressed
   jQuery( 'a.add_media' ).on( 'click', function() {
+    var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
     wp.media.model.settings.post.id = wp_media_post_id;
   });
 
   // Sort slider Images.
   jQuery( function() {
-    jQuery( "#wprtc_sortable" ).sortable({
-      placeholder: "wprtc_state_highlight",
+    jQuery( '#wprtc_sortable' ).sortable({
+      placeholder: 'wprtc_state_highlight',
       start: function(e, ui){
         ui.placeholder.height(ui.item.height());
       },
-      update: function(event, ui) {
-        jQuery(".wprtc_image_preview_wrapper").each(function(i, el){
+      update: function() {
+        jQuery('.wprtc_image_preview_wrapper').each(function(i, el){
           var slide_order = jQuery(el).index()+1;
           jQuery(this).find('input[type=hidden]').attr('name', 'wprtc_slide_order['+ slide_order +']' ); // updates the attribute
         });
       }
     });
 
-    jQuery( "#wprtc_sortable" ).disableSelection();
+    jQuery( '#wprtc_sortable' ).disableSelection();
   });
 
 });
