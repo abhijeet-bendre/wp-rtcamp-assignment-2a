@@ -115,7 +115,7 @@ class Wp_Rtcamp_Assignment_2a {
 		 * Check if $_GET['post'] exists. (For Edit Slider Screen).
 		 */
 		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay.
-		$post_id = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay.
+		$post_id = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : ''; // Input var okay.
 
 		if ( ( 'wprtc_slideshow' === $post_type && in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) )
 				||
@@ -232,8 +232,18 @@ class Wp_Rtcamp_Assignment_2a {
 			$slider_images = $slider_images[0];
 			foreach ( $slider_images as $slide_order => $slide_atachment_id ) {
 				echo "<div class='wprtc_image_preview_wrapper'>
-			 					<img class='wprtc_image_preview' src='" . esc_url( wp_get_attachment_url( $slide_atachment_id ) ) . "' height='150'>
-			 					<input type='hidden' name='wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . "'>
+								<div class='wprtc_image_preview'>
+			 						<img  src='" . esc_url( wp_get_attachment_url( $slide_atachment_id ) ) . "' />
+								</div>
+								<div class='wprtc_image_caption'>
+									<label>Add Image Caption</label>
+									<input type='text' name='wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . " ' placeholder='Add a Image Caption' size='40'>
+									<div class='wprtc_slide_actions'>
+										<a href='#' class='wprtc_button'>Edit Slide </a>
+										<a href='#' class='wprtc_button'>Delete Slide </a>
+									</div>
+								</div>
+								<input type='hidden' name='wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . "'>
 			 				</div>";
 			}
 		}

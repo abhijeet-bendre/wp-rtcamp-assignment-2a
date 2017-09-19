@@ -1,7 +1,61 @@
+
 .wprtc_image_preview_wrapper {
   border: 1px dotted grey;
   margin-bottom: 10px;
+  width: 100%;
 }
+
+.wprtc_image_preview_wrapper {
+  content: "";
+  display: table;
+  width: 100%;
+  text-align: center;
+}
+.wprtc_image_preview_wrapper:after {
+  clear: both;
+}
+
+/*Image Preview*/
+.wprtc_image_preview {
+  float: left;
+  width: 35%;
+}
+.wprtc_image_preview img{
+  width: 100%;
+}
+
+/*Image Caption*/
+.wprtc_image_caption {
+  padding: 25px;
+  float: left;
+  width: 56%;
+}
+
+.wprtc_image_caption label
+{
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.wprtc_slide_actions {
+  margin-top: 20px;
+}
+
+.wprtc_button {
+  padding: 10px;
+  text-align: center;
+  display: inline-block;
+  background-color: #0085ba;
+  color: white;
+  text-decoration: none;
+  border-radius: 2px;
+  margin-right: 20px;
+}
+
+.wprtc_button:hover {
+  color: white;
+}
+
 
 .wprtc_button_wrapper {
   border: 2px dashed #b4b9be;
@@ -16,11 +70,12 @@
   line-height: 1.2em;
 }
 
+/*Css for Sttings */
 .wprtc_slideshow_setting {
   margin-bottom: 10px;
 }
 
-.wprtc_slideshow_setting label{
+.wprtc_slideshow_setting label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
