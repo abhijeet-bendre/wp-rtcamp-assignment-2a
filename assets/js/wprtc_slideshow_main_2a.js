@@ -1,4 +1,3 @@
-
 jQuery(document).ready(function(){
   'use strict';
     /*global
@@ -68,12 +67,27 @@ jQuery(document).ready(function(){
       update: function() {
         jQuery('.wprtc_image_preview_wrapper').each(function(i, el){
           var slide_order = jQuery(el).index()+1;
-          jQuery(this).find('input[type=hidden]').attr('name', 'wprtc_slide_order['+ slide_order +']' ); // updates the attribute
+          jQuery(this).find('input[type=hidden]').attr('name', 'wprtc_slide_order['+ slide_order +']' );
+          jQuery(this).find('.wprtc_delete_slide_button').attr('data-slide-order', slide_order);
         });
       }
     });
 
     jQuery( '#wprtc_sortable' ).disableSelection();
+  });
+
+  jQuery('.wprtc_delete_slide_button').on('click', function( event ){
+    event.preventDefault();
+    var current_slide_order = jQuery(this).data('slide-order');
+
+    // Find the input name whose slide remove The
+    jQuery('input[name=wprtc_slide_order\\[' + current_slide_order + '\\]]').parent().remove();
+    jQuery('.wprtc_image_preview_wrapper').each(function(i, el){
+      var slide_order = jQuery(el).index()+1;
+      jQuery(this).find('input[type=hidden]').attr('name', 'wprtc_slide_order['+ slide_order +']' );
+      jQuery(this).find('.wprtc_delete_slide_button').attr('data-slide-order', slide_order);
+    });
+
   });
 
 });

@@ -237,13 +237,13 @@ class Wp_Rtcamp_Assignment_2a {
 								</div>
 								<div class='wprtc_image_caption'>
 									<label>Add Image Caption</label>
-									<input type='text' name='wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . " ' placeholder='Add a Image Caption' size='40'>
+									<input type='text' name='' value='' placeholder='Add a Image Caption' size='40'>
 									<div class='wprtc_slide_actions'>
-										<a href='#' class='wprtc_button'>Edit Slide </a>
-										<a href='#' class='wprtc_button'>Delete Slide </a>
+										<a href='#' class='wprtc_edit_slide_button' >Edit Slide </a>
+										<a href='#' class='wprtc_delete_slide_button' data-slide-order='" . esc_attr( $slide_order ) . "'>Delete Slide </a>
 									</div>
 								</div>
-								<input type='hidden' name='wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . "'>
+								<input type='hidden' name='wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . "' / >
 			 				</div>";
 			}
 		}
