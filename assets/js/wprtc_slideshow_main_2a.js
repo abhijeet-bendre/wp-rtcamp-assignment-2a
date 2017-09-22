@@ -66,50 +66,8 @@ jQuery( document ).ready( function() {
     wp.media.model.settings.post.id = wp_media_post_id;
   });
 
-  // Sort slider Images.
-  jQuery( function() {
-    jQuery( '#wprtc_sortable' ).sortable({
-      placeholder: 'wprtc_state_highlight',
-      start: function(e, ui){
-        ui.placeholder.height( ui.item.height() );
-      },
-      update: function() {
-        jQuery( '.wprtc_image_preview_wrapper' ).each(function( i, el ){
-          var slide_order = jQuery(el).index()+1;
-          //Uddate Corresponding order ids.
-          jQuery(this).find( 'input[type=hidden]' ).attr( 'name', 'wprtc_slide_order['+ slide_order +']' );
-          jQuery(this).find( '.wprtc_edit_slide_button' ).attr( 'data-slide-order', slide_order );
-          jQuery(this).find( '.wprtc_delete_slide_button' ).attr( 'data-slide-order', slide_order );
-        });
-      }
-    });
-
-    jQuery( '#wprtc_sortable' ).disableSelection();
-  });
-
-  // On "Delete Slide" click remove the slide
-  jQuery( '.wprtc_slide_actions' ).on( 'click' , '.wprtc_delete_slide_button', function( event ){
-
-    event.preventDefault();
-    var current_slide_order = jQuery( this ).attr( 'data-slide-order' );
-    alert(current_slide_order);
-    /*
-     * 1)Find the the element whose slide order matches with data-slide-order
-     * 2)Find parent of it and remove it.
-     */
-    jQuery( 'input[name=wprtc_slide_order\\[' + current_slide_order + '\\]]' ).parent().remove();
-    //Update Slide orders.
-    jQuery( '.wprtc_image_preview_wrapper' ).each( function( i, el ){
-      var slide_order = jQuery( el ).index()+1;
-      jQuery( this ).find( 'input[type=hidden]' ).attr( 'name', 'wprtc_slide_order['+ slide_order +']' );
-      //Uddate corresponding slide order.
-      jQuery( this ).find( '.wprtc_edit_slide_button' ).attr( 'data-slide-order', slide_order );
-      jQuery( this ).find( '.wprtc_delete_slide_button' ).attr( 'data-slide-order', slide_order );
-    });
-  });
-
   // On "Edit Slide" click, update with newly selected image.
-  jQuery( '.wprtc_edit_slide_button' ).on( 'click', function( event ){
+  jQuery( '.wprtc_slideshow_wrapper' ).on( 'click', '.wprtc_edit_slide_button', function( event ){
     // Uploading files
     var file_frame;
     // Get current Slide order no.
@@ -159,5 +117,48 @@ jQuery( document ).ready( function() {
     // Finally, open the modal
     file_frame.open();
   });
+
+  // On "Delete Slide" click remove the slide
+  jQuery( '.wprtc_slideshow_wrapper' ).on( 'click' , '.wprtc_delete_slide_button', function( event ){
+
+    var current_slide_order = jQuery( this ).attr( 'data-slide-order' );
+    alert(current_slide_order);
+    event.preventDefault();
+    /*
+     * 1)Find the the element whose slide order matches with data-slide-order
+     * 2)Find parent of it and remove it.
+     */
+    jQuery( 'input[name=wprtc_slide_order\\[' + current_slide_order + '\\]]' ).parent().remove();
+    //Update Slide orders.
+    jQuery( '.wprtc_image_preview_wrapper' ).each( function( i, el ){
+      var slide_order = jQuery( el ).index()+1;
+      jQuery( this ).find( 'input[type=hidden]' ).attr( 'name', 'wprtc_slide_order['+ slide_order +']' );
+      //Uddate corresponding slide order.
+      jQuery( this ).find( '.wprtc_edit_slide_button' ).attr( 'data-slide-order', slide_order );
+      jQuery( this ).find( '.wprtc_delete_slide_button' ).attr( 'data-slide-order', slide_order );
+    });
+  });
+
+  // Sort slider Images.
+  jQuery( function() {
+    jQuery( '#wprtc_sortable' ).sortable({
+      placeholder: 'wprtc_state_highlight',
+      start: function(e, ui){
+        ui.placeholder.height( ui.item.height() );
+      },
+      update: function() {
+        jQuery( '.wprtc_image_preview_wrapper' ).each(function( i, el ){
+          var slide_order = jQuery(el).index()+1;
+          //Uddate Corresponding order ids.
+          jQuery(this).find( 'input[type=hidden]' ).attr( 'name', 'wprtc_slide_order['+ slide_order +']' );
+          jQuery(this).find( '.wprtc_edit_slide_button' ).attr( 'data-slide-order', slide_order );
+          jQuery(this).find( '.wprtc_delete_slide_button' ).attr( 'data-slide-order', slide_order );
+        });
+      }
+    });
+
+    jQuery( '#wprtc_sortable' ).disableSelection();
+  });
+
 
 });
