@@ -48,6 +48,7 @@ jQuery( document ).ready(
 								'action': 'wprtc_get_single_slide_html',
 								'wprtc_attachment_id': attachment.id,
 								'wprtc_slide_order': slide_order,
+								'wprtc_ajax_nonce' : wprtc_get_single_slide_html_nonce
 							};
 
 							// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php.
@@ -114,7 +115,7 @@ jQuery( document ).ready(
 							var attachment = file_frame.state().get( 'selection' ).first().toJSON();
 							var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id.
 
-							/*
+													/*
                             * 1)Find the the element whose slide order matches with data('slide-order')
                             * 2)Find parent of it and search for child image element of this parent.
                             */
@@ -158,7 +159,7 @@ jQuery( document ).ready(
 
 			  // Sort slider Images.
 			  jQuery(
-                  function() {
+					function() {
 									  jQuery( '#wprtc_sortable' ).sortable(
 										  {
 												placeholder: 'wprtc_state_highlight',
@@ -179,8 +180,8 @@ jQuery( document ).ready(
 												}
 									  );
 
-						  jQuery( '#wprtc_sortable' ).disableSelection();
-					}
+										jQuery( '#wprtc_sortable' ).disableSelection();
+							}
 			  );
 	}
 );

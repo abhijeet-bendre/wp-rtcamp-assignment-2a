@@ -117,8 +117,8 @@ class Wp_Rtcamp_Assignment_2a {
 		 *	or
 		 * Check if $_GET['post'] exists. (For Edit Slider Screen).
 		 */
-		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay.
-		$post_id = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : ''; // Input var okay.
+		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
+		$post_id = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
 
 		if ( ( 'wprtc_slideshow' === $post_type && in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) )
 				||
@@ -132,7 +132,7 @@ class Wp_Rtcamp_Assignment_2a {
 			wp_register_script( 'wprtc_slideshow_main_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js' );
 			wp_enqueue_script( 'wprtc_slideshow_main_2a_js', array( 'jquery' ) );
 			wp_localize_script( 'wprtc_slideshow_main_2a_js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-
+			wp_localize_script( 'wprtc_slideshow_main_2a_js', 'wprtc_get_single_slide_html_nonce', wp_create_nonce( 'wprtc_get_single_slide_html_nonce' ) );
 			if ( ! wp_script_is( 'jquery-ui', 'enqueued' ) ) {
 				wp_enqueue_script( 'jquery-ui' );
 			}
@@ -182,7 +182,7 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function wprtc_slideshow_cpt_table_columns_title( $defaults ) {
-		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay.
+		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
 		if ( 'wprtc_slideshow' === $post_type ) {
 			 $defaults['wprtc_slideshow_shortcode'] = 'Shortcode';
 		}
@@ -222,6 +222,8 @@ class Wp_Rtcamp_Assignment_2a {
 	 */
 	public function wprtc_render_slideshow_slides_metabox() {
 		global $post;
+		$slide_show_nonce = wp_create_nonce( '_wprtc_slideshow_slides_nonce' );
+
 		wp_enqueue_media();
 		wp_localize_script( 'wprtc_slideshow_main_2a_js', 'post',
 			array(
@@ -238,10 +240,12 @@ class Wp_Rtcamp_Assignment_2a {
 				$this->wprtc_get_single_slide_html( $slide_order, $slide_atachment_id );
 			}
 		}
+		echo '<input type="hidden" name="_wprtc_slideshow_slides_nonce" value="' . esc_attr( $slide_show_nonce ) . '"/>';
 		echo '</div>';
 		echo "<div class='wprtc_button_wrapper'>
 						<input id='wprtc_add_new_slide' type='button upload_image_button' class='button' value='" . esc_html__( 'Add New Slide', 'wprtc_assignment_2a' ) . "'/>
 					</div>";
+
 		ob_get_flush();
 	}
 
@@ -256,12 +260,11 @@ class Wp_Rtcamp_Assignment_2a {
 	public function wprtc_get_single_slide_html( $slide_order, $slide_atachment_id ) {
 		ob_start();
 		$is_ajax_call = false;
-		if ( isset( $_POST['wprtc_attachment_id'], $_POST['wprtc_slide_order'] ) ) { // Input var okay.sanitization okay.
+		if ( isset( $_POST['wprtc_attachment_id'], $_POST['wprtc_slide_order'], $_POST['wprtc_ajax_nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['wprtc_ajax_nonce'] ), 'wprtc_get_single_slide_html_nonce' ) ) { // Input var okay.sanitization okay.) ) { // Input var okay.sanitization okay.
 			$slide_atachment_id = sanitize_text_field( wp_unslash( $_POST['wprtc_attachment_id'] ) ); // Input var okay; sanitization okay.
 			$slide_order = sanitize_text_field( wp_unslash( $_POST['wprtc_slide_order'] ) ); // Input var okay; sanitization okay.
 			$is_ajax_call = true;
 		}
-
 		echo "<div class='wprtc_image_preview_wrapper'>
 						<div class='wprtc_image_preview'>
 		 						<img  src='" . esc_url( wp_get_attachment_url( $slide_atachment_id ) ) . "' />
@@ -293,7 +296,7 @@ class Wp_Rtcamp_Assignment_2a {
 		$animation_speed = '';
 		$slider_settings = get_post_meta( $post->ID, '_wprtc_slideshow_settings' );
 		$animation = '';
-		// var_dump($slider_settings);.
+
 		ob_start();
 		echo "<div class='wprtc_slideshow_settings_wrapper'>";
 		if ( ! empty( $slider_settings ) ) {
@@ -360,12 +363,17 @@ class Wp_Rtcamp_Assignment_2a {
 			return;
 		}
 
+		if ( ! isset( $_POST['_wprtc_slideshow_slides_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_slideshow_slides_nonce'], '_wprtc_slideshow_slides_nonce' ) ) ) ) { // Input var okay.
+			return;
+		}
+
 		// Check if valid post_type.
 		if ( isset( $_POST['post_type'] ) ) { // Input var okay.
 			if ( 'wprtc_slideshow' !== sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) ) { // Input var okay.
 				return;
 			}
 		}
+
 		foreach ( $_POST as $post_key => $post_value ) { // Input var okay.
 			// $key is input hidden , $value is attachment id.
 			if ( strpos( $post_key, '_wprtc_slide_order' ) !== false ) {
