@@ -274,7 +274,7 @@ class Wp_Rtcamp_Assignment_2a {
 									<a href='#' class='wprtc_delete_slide_button' data-slide-order='" . esc_attr( $slide_order ) . "'>" . esc_html__( 'Delete Slide', 'wprtc_assignment_2a' ) . "</a>
 								</div>
 							</div>
-							<input type='hidden' name='wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . "' / >
+							<input type='hidden' name='_wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . "' / >
 		 				</div>";
 		ob_get_flush();
 		if ( $is_ajax_call ) {
@@ -306,24 +306,24 @@ class Wp_Rtcamp_Assignment_2a {
 		$slideshow_speed  = isset( $slider_settings['slideshow_speed'] ) ? sanitize_text_field( $slider_settings['slideshow_speed'] ) : '';
 
 		echo "<div class='wprtc_slideshow_setting'>
-						<label for='_wprtc_slider_settings[animation_type]'>Animation Type:</label>
+						<label for='_wprtc_slider_settings[animation_type]'>" . esc_html__( 'Animation Type', 'wprtc_assignment_2a' ) . ":</label>
 						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='fade' " . checked( $animation_type, 'fade', false ) . "'>Fade
 						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='slide' " . checked( $animation_type, 'slide', false ) . "'>Slide
 					</div>
 					<div class='wprtc_slideshow_setting'>
-						<label for='_wprtc_slider_settings[animation_speed]'>Animation Speed:</label>
+						<label for='_wprtc_slider_settings[animation_speed]'>" . esc_html__( 'Animation Speed', 'wprtc_assignment_2a' ) . ":</label>
 						<input type='text' name='_wprtc_slider_settings[animation_speed]' value='" . esc_html( $animation_speed ) . "'>
 					</div>
 					<div class='wprtc_slideshow_setting'>
-						<label for='_wprtc_slider_settings[animation_loop]'>Animation Loop:</label>
+						<label for='_wprtc_slider_settings[animation_loop]'>" . esc_html__( 'Animation Loop', 'wprtc_assignment_2a' ) . ":</label>
 						<input type='checkbox' name='_wprtc_slider_settings[animation_loop]' value='true' " . checked( $animation_loop, 'true', false ) . ">
 					</div>
 					<div class='wprtc_slideshow_setting'>
-						<label for='_wprtc_slider_settings[randomize]'>Randomize slide order:</label>
+						<label for='_wprtc_slider_settings[randomize]'>" . esc_html__( 'Randomize slide order', 'wprtc_assignment_2a' ) . ":</label>
 						<input type='checkbox' name='_wprtc_slider_settings[randomize]' value='true' " . checked( $randomize, 'true', false ) . ">
 					</div>
 					<div class='wprtc_slideshow_setting'>
-						<label for='_wprtc_slider_settings[slideshow_speed]'>SlideShow Speed:</label>
+						<label for='_wprtc_slider_settings[slideshow_speed]'>" . esc_html__( 'SlideShow Speed', 'wprtc_assignment_2a' ) . ":</label>
 						<input type='text' name='_wprtc_slider_settings[slideshow_speed]' value='" . esc_html( $slideshow_speed ) . "'>
 					</div>
 		</div>";
@@ -368,7 +368,7 @@ class Wp_Rtcamp_Assignment_2a {
 		}
 		foreach ( $_POST as $post_key => $post_value ) { // Input var okay.
 			// $key is input hidden , $value is attachment id.
-			if ( strpos( $post_key, 'wprtc_slide_order' ) !== false ) {
+			if ( strpos( $post_key, '_wprtc_slide_order' ) !== false ) {
 				$wprtc_slides = $post_value;
 				// Build Slides array to save in to post meta.
 				array_walk( $wprtc_slides, function( &$wprtc_value, &$wprtc_key ) {
@@ -422,7 +422,6 @@ class Wp_Rtcamp_Assignment_2a {
 		$post_status = get_post_status( $args['slider_id'] );
 
 		ob_start();
-		// var_dump( $slider_images );.
 		echo '<div class="flexslider">';
 		if ( ! empty( $slider_images ) && 'publish' === $post_status ) {
 			$slider_settings = isset( $slider_settings[0] ) ? $slider_settings[0] : '';

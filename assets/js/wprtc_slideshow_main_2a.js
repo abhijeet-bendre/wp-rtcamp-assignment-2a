@@ -105,7 +105,7 @@ jQuery( document ).ready( function() {
        * 1)Find the the element whose slide order matches with data('slide-order')
        * 2)Find parent of it and search for child image element of this parent.
        */
-      var slide_order = jQuery( 'input[name=wprtc_slide_order\\[' + current_slide_order + '\\]]' );
+      var slide_order = jQuery( 'input[name=_wprtc_slide_order\\[' + current_slide_order + '\\]]' );
       var image_preview_wrapper = slide_order.parent();
       image_preview_wrapper.find( 'img' ).attr( 'src', attachment.url );
       // Update newly attachment id.
@@ -128,11 +128,11 @@ jQuery( document ).ready( function() {
      * 1)Find the the element whose slide order matches with data-slide-order
      * 2)Find parent of it and remove it.
      */
-    jQuery( 'input[name=wprtc_slide_order\\[' + current_slide_order + '\\]]' ).parent().remove();
+    jQuery( 'input[name=_wprtc_slide_order\\[' + current_slide_order + '\\]]' ).parent().remove();
     //Update Slide orders.
     jQuery( '.wprtc_image_preview_wrapper' ).each( function( i, el ){
       var slide_order = jQuery( el ).index()+1;
-      jQuery( this ).find( 'input[type=hidden]' ).attr( 'name', 'wprtc_slide_order['+ slide_order +']' );
+      jQuery( this ).find( 'input[type=hidden]' ).attr( 'name', '_wprtc_slide_order['+ slide_order +']' );
       //Uddate corresponding slide order.
       jQuery( this ).find( '.wprtc_edit_slide_button' ).attr( 'data-slide-order', slide_order );
       jQuery( this ).find( '.wprtc_delete_slide_button' ).attr( 'data-slide-order', slide_order );
@@ -150,7 +150,7 @@ jQuery( document ).ready( function() {
         jQuery( '.wprtc_image_preview_wrapper' ).each(function( i, el ){
           var slide_order = jQuery(el).index()+1;
           //Uddate Corresponding order ids.
-          jQuery(this).find( 'input[type=hidden]' ).attr( 'name', 'wprtc_slide_order['+ slide_order +']' );
+          jQuery(this).find( 'input[type=hidden]' ).attr( 'name', '_wprtc_slide_order['+ slide_order +']' );
           jQuery(this).find( '.wprtc_edit_slide_button' ).attr( 'data-slide-order', slide_order );
           jQuery(this).find( '.wprtc_delete_slide_button' ).attr( 'data-slide-order', slide_order );
         });
