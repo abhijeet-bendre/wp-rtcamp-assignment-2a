@@ -363,7 +363,7 @@ class Wp_Rtcamp_Assignment_2a {
 			return;
 		}
 
-		if ( ! isset( $_POST['_wprtc_slideshow_slides_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_slideshow_slides_nonce'], '_wprtc_slideshow_slides_nonce' ) ) ) ) { // Input var okay.
+		if ( empty( $_POST['_wprtc_slideshow_slides_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_slideshow_slides_nonce'], '_wprtc_slideshow_slides_nonce' ) ) ) ) { // Input var okay.
 			return;
 		}
 
@@ -375,7 +375,7 @@ class Wp_Rtcamp_Assignment_2a {
 		}
 
 		foreach ( $_POST as $post_key => $post_value ) { // Input var okay.
-			// $key is input hidden , $value is attachment id.
+			// $key is input hidden, $value is attachment id.
 			if ( strpos( $post_key, '_wprtc_slide_order' ) !== false ) {
 				$wprtc_slides = $post_value;
 				// Build Slides array to save in to post meta.
