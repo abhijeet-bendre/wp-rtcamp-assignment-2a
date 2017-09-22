@@ -296,7 +296,7 @@ class Wp_Rtcamp_Assignment_2a {
 		$animation_speed = '';
 		$slider_settings = get_post_meta( $post->ID, '_wprtc_slideshow_settings' );
 		$animation = '';
-
+		var_dump($slider_settings);
 		ob_start();
 		echo "<div class='wprtc_slideshow_settings_wrapper'>";
 		if ( ! empty( $slider_settings ) ) {
@@ -362,7 +362,7 @@ class Wp_Rtcamp_Assignment_2a {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
-
+		// Verify Nonce
 		if ( empty( $_POST['_wprtc_slideshow_slides_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_slideshow_slides_nonce'], '_wprtc_slideshow_slides_nonce' ) ) ) ) { // Input var okay.
 			return;
 		}

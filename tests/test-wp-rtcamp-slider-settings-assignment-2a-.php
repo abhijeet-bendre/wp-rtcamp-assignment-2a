@@ -9,8 +9,13 @@
  * Sample test case.
  */
 class Wp_Rtcamp_Slider_Settings_Assignment_2a_Test extends WP_UnitTestCase {
-
+	/**
+	 * CPT slug for slide show.
+	 *
+	 * @var static protected
+	 */
 	protected static $post_type = 'wprtc_slideshow';
+
 	/**
 	 * Setup of 'setUpBeforeClass' test fixture
 	 */
@@ -28,18 +33,26 @@ class Wp_Rtcamp_Slider_Settings_Assignment_2a_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test if slideshow slides are saved
+	 * Setup test fixture to run for every test method.
 	 */
-	function test_if_wprtc_slideshow_slides_are_saved() {
+	public function setUp() {
+
 		// Simulate $_POST variable for save_post hook.
 		$_POST['post_type'] = self::$post_type;
 
 		// Simulate $_POST variable for nonce.
 		$slide_show_nonce = wp_create_nonce( '_wprtc_slideshow_slides_nonce' );
 		$_POST['_wprtc_slideshow_slides_nonce'] = $slide_show_nonce;
+	}
+
+	/**
+	 * Test if slideshow setting "animation_type : fade" is saved.
+	 */
+	function test_if_wprtc_slideshow_slides_are_saved() {
 
 		// Simulate $_POST with Slides for fake attachment id (for eg. 180).
-		$_POST['_wprtc_slide_order'] = array( 180 );
+		$_POST['_wprtc_slider_settings[animation_type]'] = array( 'fade' );
+
 		$post_id  = $this->factory()->post->create(
 			array(
 				'post_status' => 'publish',
@@ -48,10 +61,9 @@ class Wp_Rtcamp_Slider_Settings_Assignment_2a_Test extends WP_UnitTestCase {
 			)
 		);
 
-		$slider_images = get_post_meta( $post_id, '_wprtc_slideshow_slides' );
+		$slider_settings = get_post_meta( $post_id, '_wprtc_slideshow_settings' );
 
-		$slider_images = $slider_images[0];
-		$this->assertEquals( 180, $slider_images[0] );
+		$slider_settings = $slider_settings[0];
+		$this->assertEquals( 'fade', $slider_settings[0] );
 	}
-
 }

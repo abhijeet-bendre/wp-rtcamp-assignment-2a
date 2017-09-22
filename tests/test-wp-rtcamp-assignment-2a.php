@@ -12,9 +12,10 @@ class Wp_Rtcamp_Assignment_2a_Test extends WP_UnitTestCase {
 	/**
 	 * CPT slug for slide show.
 	 *
-	 * @var static  private
+	 * @var static protected
 	 */
 	protected static $post_type = 'wprtc_slideshow';
+
 	/**
 	 * Setup of 'setUpBeforeClass' test fixture
 	 */
