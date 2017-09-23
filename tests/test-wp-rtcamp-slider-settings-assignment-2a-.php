@@ -110,4 +110,26 @@ class Wp_Rtcamp_Slider_Settings_Assignment_2a_Test extends WP_UnitTestCase {
 		$slider_settings = $slider_settings[0];
 		$this->assertEquals( '1000', $slider_settings[0] );
 	}
+
+	/**
+	 * Test if slideshow setting "animation_loop : true" is saved.
+	 */
+	function test_if_wprtc_slideshow_setting_animation_loop_is_saved() {
+
+		// Simulate $_POST with slider setting animation_speed = true.
+		$_POST['_wprtc_slider_settings[animation_loop]'] = array( 'true' );
+
+		$post_id  = $this->factory()->post->create(
+			array(
+				'post_status' => 'publish',
+				'post_title' => 'Post Title ',
+				'post_type' => 'wprtc_slideshow',
+			)
+		);
+
+		$slider_settings = get_post_meta( $post_id, '_wprtc_slideshow_settings' );
+
+		$slider_settings = $slider_settings[0];
+		$this->assertEquals( 'true', $slider_settings[0] );
+	}
 }
