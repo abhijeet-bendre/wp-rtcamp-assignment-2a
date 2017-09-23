@@ -1,9 +1,7 @@
 jQuery( document ).ready(
 	function() {
 			'use strict';
-			/*global
-                wp, post , wprtc_get_single_slide_html_nonce, ajaxurl
-            */
+			/*global wp, post , wprtc_get_single_slide_html_nonce, ajaxurl */
 			// Open media dialog on "Add new Slide" click.
 			jQuery( '#wprtc_add_new_slide' ).on(
 				'click', function( event ) {
