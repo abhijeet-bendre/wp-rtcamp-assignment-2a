@@ -357,16 +357,17 @@ class Wp_Rtcamp_Assignment_2a {
 		$wprtc_slides = array();
 		$wprtc_slider_settings = array();
 
-		// If doing auto save return.
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
-		// Verify Nonce
-		if ( empty( $_POST['_wprtc_slideshow_slides_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_slideshow_slides_nonce'], '_wprtc_slideshow_slides_nonce' ) ) ) ) { // Input var okay.
+		/*
+		* If doing auto save return.
+		* or
+		* Verify Nonce
+		* Check if valid post_type.
+		*/
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ||
+				 ( empty( $_POST['_wprtc_slideshow_slides_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_slideshow_slides_nonce'], '_wprtc_slideshow_slides_nonce' ) ) ) ) ) { // Input var okay.
 			return;
 		}
 
-		// Check if valid post_type.
 		if ( isset( $_POST['post_type'] ) ) { // Input var okay.
 			if ( 'wprtc_slideshow' !== sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) ) { // Input var okay.
 				return;
