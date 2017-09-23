@@ -149,7 +149,7 @@ class Wp_Rtcamp_Assignment_2a {
 		// Register and Enqueue Style only if its not previously enqueued.
 		if ( ! wp_style_is( 'flexslider_style', 'enqueued' ) ) {
 			wp_register_style( 'flexslider_style', plugin_dir_url( __FILE__ ) . 'assets/css/lib/flexslider.css', null );
-			$registered  = wp_enqueue_style( 'flexslider_style' );
+			wp_enqueue_style( 'flexslider_style' );
 		}
 
 		// Register and Enqueue Style.
@@ -295,8 +295,6 @@ class Wp_Rtcamp_Assignment_2a {
 		$animation_type = '';
 		$animation_speed = '';
 		$slider_settings = get_post_meta( $post->ID, '_wprtc_slideshow_settings' );
-		$animation = '';
-		var_dump($slider_settings);
 		ob_start();
 		echo "<div class='wprtc_slideshow_settings_wrapper'>";
 		if ( ! empty( $slider_settings ) ) {
@@ -358,6 +356,7 @@ class Wp_Rtcamp_Assignment_2a {
 		global $post;
 		$wprtc_slides = array();
 		$wprtc_slider_settings = array();
+
 		// If doing auto save return.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
