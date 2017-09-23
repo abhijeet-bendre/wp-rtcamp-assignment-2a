@@ -88,4 +88,26 @@ class Wp_Rtcamp_Slider_Settings_Assignment_2a_Test extends WP_UnitTestCase {
 		$slider_settings = $slider_settings[0];
 		$this->assertEquals( 'slide', $slider_settings[0] );
 	}
+
+	/**
+	 * Test if slideshow setting "animation_speed : 1000" is saved.
+	 */
+	function test_if_wprtc_slideshow_setting_animation_speed_is_saved() {
+
+		// Simulate $_POST with slider setting animation_speed = 1000.
+		$_POST['_wprtc_slider_settings[animation_speed]'] = array( '1000' );
+
+		$post_id  = $this->factory()->post->create(
+			array(
+				'post_status' => 'publish',
+				'post_title' => 'Post Title ',
+				'post_type' => 'wprtc_slideshow',
+			)
+		);
+
+		$slider_settings = get_post_meta( $post_id, '_wprtc_slideshow_settings' );
+
+		$slider_settings = $slider_settings[0];
+		$this->assertEquals( '1000', $slider_settings[0] );
+	}
 }
