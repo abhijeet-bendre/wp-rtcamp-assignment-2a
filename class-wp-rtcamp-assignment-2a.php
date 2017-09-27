@@ -9,7 +9,7 @@
 /*
 Plugin Name: Assignment-2a: WordPress-Slideshow Plugin
 Plugin URI:  http://tymescripts.com/rtCamp-assignment
-Description: Assignment-2a: WordPress-Slideshow Plugin
+Description: WordPress-Slideshow Plugin creates an admin-side Menu called "rtCamp Slideshow". It uses Woocommerce's "Flex Slider" library for displaying sliders. You can add/remove slides, change the order of slides, control settings of individual sliders and much more.
 Version:     0.1
 Author:      Abhijeet Bendre
 Author URI:  http://tymescripts.com
@@ -57,9 +57,9 @@ class Wp_Rtcamp_Assignment_2a {
 		// Register Custom Post Type.
 			$labels = array(
 				'name'                => _x( 'rtCamp Slideshow', 'rtcamp_slideshow', 'wprtc_assignment_2a' ),
-				'singular_name'       => _x( 'rtCamp slideshow', 'rtcamp_slideshow', 'wprtc_assignment_2a' ),
-				'menu_name'           => _x( 'rtCamp slideshow', 'wprtc_assignment_2a' ),
-				'name_admin_bar'      => __( 'rtCamp slideshow', 'wprtc_assignment_2a' ),
+				'singular_name'       => _x( 'rtCamp Slideshow', 'rtcamp_slideshow', 'wprtc_assignment_2a' ),
+				'menu_name'           => _x( 'rtCamp Slideshow', 'wprtc_assignment_2a' ),
+				'name_admin_bar'      => __( 'rtCamp Slideshow', 'wprtc_assignment_2a' ),
 				'all_items'           => __( 'All rtCamp Sliders', 'wprtc_assignment_2a' ),
 				'add_new_item'        => __( 'Add New rtCamp Slider', 'wprtc_assignment_2a' ),
 				'add_new'             => __( 'Add New', 'wprtc_assignment_2a' ),
@@ -129,7 +129,7 @@ class Wp_Rtcamp_Assignment_2a {
 			wp_enqueue_style( 'wprtc_slideshow_main_2a_css' );
 
 			// Register and Enqueue Script.
-			wp_register_script( 'wprtc_slideshow_main_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js' );
+			wp_register_script( 'wprtc_slideshow_main_2a_js', plugin_dir_url( __FILE__ ) . 'assets/js/wprtc_slideshow_main_2a.js', '', '', true );
 			wp_enqueue_script( 'wprtc_slideshow_main_2a_js', array( 'jquery' ) );
 			wp_localize_script( 'wprtc_slideshow_main_2a_js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
 			wp_localize_script( 'wprtc_slideshow_main_2a_js', 'wprtc_get_single_slide_html_nonce', wp_create_nonce( 'wprtc_get_single_slide_html_nonce' ) );
@@ -158,7 +158,7 @@ class Wp_Rtcamp_Assignment_2a {
 
 		// Register and Enqueue flexslider_script only if its not previously enqueued.
 		if ( ! wp_script_is( 'flexslider_script', 'enqueued' ) ) {
-			wp_register_script( 'flexslider_script', plugin_dir_url( __FILE__ ) . 'assets/js/lib/jquery.flexslider-min.js' );
+			wp_register_script( 'flexslider_script', plugin_dir_url( __FILE__ ) . 'assets/js/lib/jquery.flexslider-min.js', '', '', true );
 			wp_enqueue_script( 'flexslider_script', array( 'jquery' ) );
 		}
 	}
@@ -252,9 +252,10 @@ class Wp_Rtcamp_Assignment_2a {
 	/**
 	 * Get single slide html
 	 *
-	 *  @param string $slide_order Current order of slide.
+	 * @param string $slide_order Current order of slide.
 	 *
-	 *  @param string $slide_atachment_id Attachment Id.
+	 * @param string $slide_atachment_id Attachment Id.
+	 *
 	 * @since 0.1
 	 */
 	public function wprtc_get_single_slide_html( $slide_order, $slide_atachment_id ) {
@@ -360,14 +361,16 @@ class Wp_Rtcamp_Assignment_2a {
 		/*
 		* If doing auto save return.
 		* or
-		* Verify Nonce
-		* Check if valid post_type.
+		* Verify Nonce, if not verified return.
 		*/
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ||
-				 ( empty( $_POST['_wprtc_slideshow_slides_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_slideshow_slides_nonce'], '_wprtc_slideshow_slides_nonce' ) ) ) ) ) { // Input var okay.
+				 ( isset( $_POST['_wprtc_slideshow_slides_nonce'] ) && ! wp_verify_nonce( sanitize_key( $_POST['_wprtc_slideshow_slides_nonce'] ), '_wprtc_slideshow_slides_nonce' ) ) ) { // Input var okay.
 			return;
 		}
 
+		/*
+		* Check if valid post_type.
+		*/
 		if ( isset( $_POST['post_type'] ) ) { // Input var okay.
 			if ( 'wprtc_slideshow' !== sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) ) { // Input var okay.
 				return;
@@ -382,9 +385,6 @@ class Wp_Rtcamp_Assignment_2a {
 				array_walk( $wprtc_slides, function( &$wprtc_value, &$wprtc_key ) {
 						$wprtc_slides[ $wprtc_key ] = $wprtc_value;
 				});
-				// Update Slides.
-				update_post_meta( $post_id, '_wprtc_slideshow_slides', $wprtc_slides );
-
 			} elseif ( strpos( $post_key, '_wprtc_slider_settings' ) !== false ) {
 
 				$wprtc_slider_settings = $post_value;
@@ -392,10 +392,12 @@ class Wp_Rtcamp_Assignment_2a {
 				array_walk( $wprtc_slider_settings, function( &$wprtc_settings_value, &$wprtc_settings_key ) {
 						$wprtc_slider_settings[ $wprtc_settings_key ] = $wprtc_settings_value;
 				});
-				// Update Slider Settings.
-				update_post_meta( $post_id, '_wprtc_slideshow_settings', $wprtc_slider_settings );
 			}
 		}
+		// Update Slides.
+		update_post_meta( $post_id, '_wprtc_slideshow_slides', $wprtc_slides );
+		// Update Slider Settings.
+		update_post_meta( $post_id, '_wprtc_slideshow_settings', $wprtc_slider_settings );
 	}
 
 	/**

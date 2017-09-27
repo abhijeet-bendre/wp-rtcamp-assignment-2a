@@ -19,7 +19,7 @@
   float: left;
   width: 35%;
 }
-.wprtc_image_preview img{
+.wprtc_image_preview img {
   width: 100%;
 }
 
@@ -30,8 +30,7 @@
   width: 56%;
 }
 
-.wprtc_image_caption label
-{
+.wprtc_image_caption label {
   display: inline-block;
   margin-bottom: 10px;
 }
