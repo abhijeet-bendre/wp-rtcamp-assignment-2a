@@ -1,4 +1,4 @@
-===  Assignment-2a: WordPress-Slideshow Plugin ===
+##  Assignment-2a: WordPress-Slideshow Plugin 
 
 * Contributors: (abhijeet-bendre)
 * Requires at least: 4.8.1
@@ -13,11 +13,11 @@ From here: https://careers.rtcamp.com/wordpress-engineer/assignment/
 
 ###  Admin-Side:
 
-    Creates an admin-side page **rtCamp Slideshow** . This page provides an interface to create slide
-    shows and add/remove images to slide show.
+    Creates an admin-side page **rtCamp Slideshow**. This page provides an interface to create slideshows 
+    and add/remove images to the slideshow.
     1. Enter the title.
-    2. Add/remove images for the slide show.
-    3. Add/remove settings for slide show.
+    2. Add/remove images for the slideshow.
+    3. Add/remove settings for slideshow.
     4. Click on "Publish" button to save your changes.
     5. Copy shortcode to use it in Page/Posts.
 
