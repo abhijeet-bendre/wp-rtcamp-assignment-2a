@@ -9,7 +9,9 @@ jQuery( document ).ready(
 			'use strict';
 			/*global wp, post , wprtc_get_single_slide_html_nonce, ajaxurl */
 
-			// Open media dialog on "Add new Slide" click.
+			/*
+			* Open media dialog on "Add new Slide" click.
+			*/
 			jQuery( '#wprtc_add_new_slide' ).on(
 				'click', function( event ) {
 					// Uploading files.
@@ -66,7 +68,7 @@ jQuery( document ).ready(
 							// Restore the main post ID.
 							wp.media.model.settings.post.id = wp_media_post_id;
 						}
-					);
+					); // "Add new Slide" click ends.
 
 					// Finally, open the modal.
 					file_frame.open();
@@ -81,7 +83,9 @@ jQuery( document ).ready(
 				  }
 			  );
 
-			  // On "Edit Slide" click, update with newly selected image.
+			  /*
+				* On "Edit Slide" click, update with newly selected image.
+				*/
 			  jQuery( '.wprtc_slideshow_wrapper' ).on(
 				  'click', '.wprtc_edit_slide_button', function( event ){
 					// Uploading files.
@@ -137,17 +141,27 @@ jQuery( document ).ready(
 					// Finally, open the modal.
 					file_frame.open();
 				  }
-			  );
+			  ); // Edit Slide" click ends.
 
-			  // On "Delete Slide" click remove the slide.
+			  /*
+				* On "Delete Slide" click remove the slide.
+				*/
 			  jQuery( '.wprtc_slideshow_wrapper' ).on(
 				  'click' , '.wprtc_delete_slide_button', function( event ) {
+
 					var current_slide_order = jQuery( this ).attr( 'data-slide-order' );
 					event.preventDefault();
-					/*
-                    * 1)Find the the element whose slide order matches with data-slide-order
-                    * 2)Find parent of it and remove it.
-                    */
+
+					// Confirm if Slide is to be deleted.
+					var delete_slide = window.confirm( 'Do you want to delete this Slide?' );
+					if ( ! delete_slide) {
+						return;
+					}
+
+								/*
+            		* 1)Find the the element whose slide order matches with data-slide-order
+            		* 2)Find parent of it and remove it.
+            		*/
 					jQuery( 'input[name=_wprtc_slide_order\\[' + current_slide_order + '\\]]' ).parent().remove();
 					// Update Slide orders.
 					jQuery( '.wprtc_image_preview_wrapper' ).each(
@@ -160,9 +174,12 @@ jQuery( document ).ready(
 						}
 					);
 				  }
-			  );
+			  ); // on "Delete Slide" click ends.
+
+				 /*
+				 * Sort slider Images.
+				 */
 				// @codingStandardsIgnoreStart
-			  // Sort slider Images start.
 			  jQuery(
 						function() {
 									  jQuery( '#wprtc_sortable' ).sortable(
@@ -187,9 +204,11 @@ jQuery( document ).ready(
 
 										jQuery( '#wprtc_sortable' ).disableSelection();
 						}
-			  ); // // Sort slider Images end.
+			  ); // Sort slider Images end.
 
-				// If no. of slides is less than 2, prevent slider from saving.
+				/*
+				* If no. of slides is less than 2, prevent slider from saving.
+				*/
 				jQuery( '#post' ).submit( function() {
 					if ( 'wprtc_slideshow' !== jQuery( '#post_type' ).val() ) {
 						return ;
@@ -200,6 +219,7 @@ jQuery( document ).ready(
 						return false;
 					}
 					return true;
-				});
+				}); // post submit ends.
+
 	}
 );
