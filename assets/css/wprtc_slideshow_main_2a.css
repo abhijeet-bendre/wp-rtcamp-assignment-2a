@@ -49,6 +49,7 @@
   text-decoration: none;
   border-radius: 2px;
   margin-right: 20px;
+  width: 84px;
 }
 
 .wprtc_edit_slide_button:hover,
@@ -97,4 +98,44 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+}
+
+@media all and (max-width: 575px) {
+
+  .wprtc_image_preview {
+    width: 100%;
+  }
+
+  .wprtc_slide_actions_wrapper {
+      padding: 20px 0px;
+      width: 100%;
+      margin: 0 auto;
+      display: inherit;
+  }
+
+  .wprtc_edit_slide_button,
+  .wprtc_delete_slide_button {
+    margin-right: 5px;
+  }
+}
+
+@media all and (min-width: 576px) and (min-width: 960px) {
+
+  .wprtc_slide_actions_wrapper {
+      padding: 16px;
+      margin: 0 auto;
+      display: inherit;
+  }
+
+  .wprtc_edit_slide_button,
+  .wprtc_delete_slide_button {
+    margin-right: 10px;
+  }
+
+}
+
+@media all and (min-width: 1024px) {
+  .wprtc_slide_actions {
+    margin-top: 50px;
+  }
 }
