@@ -244,7 +244,7 @@ class Wp_Rtcamp_Assignment_2a {
 		echo '<input type="hidden" name="_wprtc_slideshow_slides_nonce" value="' . esc_attr( $slide_show_nonce ) . '"/>';
 		echo '</div>';
 		echo "<div class='wprtc_button_wrapper'>
-						<input id='wprtc_add_new_slide' type='button upload_image_button' class='button' value='" . esc_html__( 'Add New Slide', 'wprtc_assignment_2a' ) . "'/>
+						<a id='wprtc_add_new_slide' class='wprtc_add_new_slide'>" . esc_html__( 'Add New Slide', 'wprtc_assignment_2a' ) . "<a/>
 					</div>";
 
 		ob_get_flush();

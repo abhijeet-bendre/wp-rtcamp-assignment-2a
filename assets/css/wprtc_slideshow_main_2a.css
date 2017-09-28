@@ -52,21 +52,40 @@
 }
 
 .wprtc_edit_slide_button:hover,
-.wprtc_delete_slide_button:hover {
+.wprtc_edit_slide_button:active,
+.wprtc_edit_slide_button:focus,
+.wprtc_delete_slide_button:hover,
+.wprtc_delete_slide_button:active,
+.wprtc_delete_slide_button:focus,
+.wprtc_add_new_slide:hover,
+.wprtc_add_new_slide:active,
+.wprtc_add_new_slide:focus {
   color: white;
 }
 
+.wprtc_add_new_slide {
+  padding: 20px;
+  text-align: center;
+  display: inline-block;
+  background-color: #0085ba;
+  color: white;
+  text-decoration: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
 .wprtc_button_wrapper {
-  border: 2px dashed #b4b9be;
   padding: 10px;
   text-align: center;
 }
 
 .wprtc_state_highlight {
-	border: 1px solid #dad55e;
-  background: #fffa90;
+	border: 4px dotted #000000;
+  background: #fffedf;;
   color: #777620;
   line-height: 1.2em;
+  margin-bottom: 10px;
+  opacity: 0.5px;
 }
 
 /*Css for Sttings */
