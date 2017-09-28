@@ -24,13 +24,13 @@
 }
 
 /*Image Caption*/
-.wprtc_image_caption {
+.wprtc_slide_actions_wrapper {
   padding: 25px;
   float: left;
   width: 56%;
 }
 
-.wprtc_image_caption label {
+.wprtc_slide_actions_wrapper label {
   display: inline-block;
   margin-bottom: 10px;
 }

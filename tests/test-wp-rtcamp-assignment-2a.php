@@ -6,7 +6,7 @@
  */
 
 /**
- * Sample test case.
+ * Test case for rtCamp assignment 2a WordPress-Slideshow Plugin.
  */
 class Wp_Rtcamp_Assignment_2a_Test extends WP_UnitTestCase {
 	/**

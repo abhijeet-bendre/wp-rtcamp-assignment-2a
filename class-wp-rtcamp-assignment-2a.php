@@ -10,6 +10,7 @@
 Plugin Name: Assignment-2a: WordPress-Slideshow Plugin
 Plugin URI:  http://tymescripts.com/rtCamp-assignment
 Description: WordPress-Slideshow Plugin creates an admin-side Menu called "rtCamp Slideshow". It uses Woocommerce's "Flex Slider" library for displaying sliders. You can add/remove slides, change the order of slides, control settings of individual sliders and much more.
+
 Version:     0.1
 Author:      Abhijeet Bendre
 Author URI:  http://tymescripts.com
@@ -270,9 +271,7 @@ class Wp_Rtcamp_Assignment_2a {
 						<div class='wprtc_image_preview'>
 		 						<img  src='" . esc_url( wp_get_attachment_url( $slide_atachment_id ) ) . "' />
 							</div>
-							<div class='wprtc_image_caption'>
-								<label>Add Image Caption</label>
-								<input type='text' name='' value='' placeholder='Add a Image Caption' size='40'>
+							<div class='wprtc_slide_actions_wrapper'>
 								<div class='wprtc_slide_actions'>
 									<a href='#' class='wprtc_edit_slide_button' data-slide-order='" . esc_attr( $slide_order ) . "'>" . esc_html__( 'Edit Slide', 'wprtc_assignment_2a' ) . "</a>
 									<a href='#' class='wprtc_delete_slide_button' data-slide-order='" . esc_attr( $slide_order ) . "'>" . esc_html__( 'Delete Slide', 'wprtc_assignment_2a' ) . "</a>
