@@ -1,7 +1,14 @@
+/**
+ * Main Js File for Assignment-2a: WordPress-Slideshow Plugin
+ *
+ * @package Wp_Rtcamp_Assignment_2a
+ */
+
 jQuery( document ).ready(
 	function() {
 			'use strict';
 			/*global wp, post , wprtc_get_single_slide_html_nonce, ajaxurl */
+
 			// Open media dialog on "Add new Slide" click.
 			jQuery( '#wprtc_add_new_slide' ).on(
 				'click', function( event ) {
@@ -154,12 +161,12 @@ jQuery( document ).ready(
 					);
 				  }
 			  );
-
-			  // Sort slider Images.
+				// @codingStandardsIgnoreStart
+			  // Sort slider Images start.
 			  jQuery(
-					function() {
+						function() {
 									  jQuery( '#wprtc_sortable' ).sortable(
-										  {
+										  {// @codingStandardsIgnoreEnd
 												placeholder: 'wprtc_state_highlight',
 												start: function( e, ui ){
 													ui.placeholder.height( ui.item.height() );
@@ -179,7 +186,20 @@ jQuery( document ).ready(
 									  );
 
 										jQuery( '#wprtc_sortable' ).disableSelection();
-							}
-			  );
+						}
+			  ); // // Sort slider Images end.
+
+				// If no. of slides is less than 2, prevent slider from saving.
+				jQuery( '#post' ).submit( function() {
+					if ( 'wprtc_slideshow' !== jQuery( '#post_type' ).val() ) {
+						return ;
+					}
+					var slide_order = jQuery( '.wprtc_image_preview_wrapper' ).length;
+					if ( slide_order < 2 ) {
+						window.alert( 'Please add atleast 2 Slides' );
+						return false;
+					}
+					return true;
+				});
 	}
 );
