@@ -244,8 +244,8 @@ class Wp_Rtcamp_Assignment_2a {
 		echo '<input type="hidden" name="_wprtc_slideshow_slides_nonce" value="' . esc_attr( $slide_show_nonce ) . '"/>';
 		echo '</div>';
 		echo "<div class='wprtc_button_wrapper'>
-						<a id='wprtc_add_new_slide' class='wprtc_add_new_slide'>" . esc_html__( 'Add New Slide', 'wprtc_assignment_2a' ) . "<a/>
-					</div>";
+						<a id='wprtc_add_new_slide' class='wprtc_add_new_slide'>" . esc_html__( 'Add New Slide', 'wprtc_assignment_2a' ) . '<a/>
+					</div>';
 
 		ob_get_flush();
 	}
@@ -262,24 +262,29 @@ class Wp_Rtcamp_Assignment_2a {
 	public function wprtc_get_single_slide_html( $slide_order, $slide_atachment_id ) {
 		ob_start();
 		$is_ajax_call = false;
-		if ( isset( $_POST['wprtc_attachment_id'], $_POST['wprtc_slide_order'], $_POST['wprtc_ajax_nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['wprtc_ajax_nonce'] ), 'wprtc_get_single_slide_html_nonce' ) ) { // Input var okay.sanitization okay.) ) { // Input var okay.sanitization okay.
+		if ( isset( $_POST['wprtc_attachment_id'], $_POST['wprtc_slide_order'], $_POST['wprtc_ajax_nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['wprtc_ajax_nonce'] ), 'wprtc_get_single_slide_html_nonce' ) ) { // Input var okay.sanitization okay.
 			$slide_atachment_id = sanitize_text_field( wp_unslash( $_POST['wprtc_attachment_id'] ) ); // Input var okay; sanitization okay.
 			$slide_order = sanitize_text_field( wp_unslash( $_POST['wprtc_slide_order'] ) ); // Input var okay; sanitization okay.
 			$is_ajax_call = true;
 		}
-		echo "<div class='wprtc_image_preview_wrapper'>
-						<div class='wprtc_image_preview'>
-		 						<img  src='" . esc_url( wp_get_attachment_url( $slide_atachment_id ) ) . "' />
-							</div>
-							<div class='wprtc_slide_actions_wrapper'>
-								<div class='wprtc_slide_actions'>
-									<a href='#' class='wprtc_edit_slide_button' data-slide-order='" . esc_attr( $slide_order ) . "'>" . esc_html__( 'Edit Slide', 'wprtc_assignment_2a' ) . "</a>
-									<a href='#' class='wprtc_delete_slide_button' data-slide-order='" . esc_attr( $slide_order ) . "'>" . esc_html__( 'Delete Slide', 'wprtc_assignment_2a' ) . "</a>
-								</div>
-							</div>
-							<input type='hidden' name='_wprtc_slide_order[" . esc_attr( $slide_order ) . "]' value='" . esc_attr( $slide_atachment_id ) . "' / >
-		 				</div>";
+
+		$single_side_html  = '<div class="wprtc_image_preview_wrapper">';
+		$single_side_html .= '<div class="wprtc_image_preview">';
+		$single_side_html .= '<img  src="' . esc_url( wp_get_attachment_url( $slide_atachment_id ) ) . '"  />';
+		$single_side_html .= '</div>';
+		$single_side_html .= '<div class="wprtc_slide_actions_wrapper">';
+		$single_side_html .= '<div class="wprtc_slide_actions">';
+		$single_side_html .= '<a href="#" class="wprtc_edit_slide_button" data-slide-order="' . esc_attr( $slide_order ) . '">' . esc_html__( 'Edit Slide', 'wprtc_assignment_2a' ) . '</a>';
+		$single_side_html .= '<a href="#" class="wprtc_delete_slide_button" data-slide-order="' . esc_attr( $slide_order ) . '">' . esc_html__( 'Delete Slide', 'wprtc_assignment_2a' ) . '</a>';
+		$single_side_html .= '</div>';
+		$single_side_html .= '</div>';
+		$single_side_html .= '<input type="hidden" name="_wprtc_slide_order[' . esc_attr( $slide_order ) . ']" value="' . esc_attr( $slide_atachment_id ) . '" / >';
+		$single_side_html .= '</div>';
+
+		echo $single_side_html; // WPCS: XSS ok.
+
 		ob_get_flush();
+
 		if ( $is_ajax_call ) {
 			wp_die();
 		}
