@@ -1,0 +1,111 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wp-rtcamp-assignment-2a\n"
+"POT-Creation-Date: 2017-10-01 12:41+0530\n"
+"PO-Revision-Date: 2017-10-01 12:41+0530\n"
+"Last-Translator: \n"
+"Language-Team: tymescripts\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr__;esc_attr_e;esc_html__;esc_html_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class-wp-rtcamp-assignment-2a.php:63 class-wp-rtcamp-assignment-2a.php:76
+#: class-wp-rtcamp-assignment-2a.php:77
+msgid "rtCamp Slideshow"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:64
+msgid "All rtCamp Sliders"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:65
+msgid "Add New rtCamp Slider"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:66
+msgid "Add New"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:67
+msgid "New rtCamp Slider"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:68
+msgid "Edit rtCamp Slider"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:69
+msgid "Update rtCamp Slider"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:70
+msgid "View rtCamp Slider"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:71
+msgid "Not found"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:72
+msgid "Not found in Trash"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:214
+msgid "Add Slides"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:215
+msgid "Add Slider Settings"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:216
+msgid "Copy Shortcode"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:247
+msgid "Add New Slide"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:277
+#: tests/test-wp-rtcamp-slider-settings-assignment-2a-ajax.php:35
+msgid "Edit Slide"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:278
+#: tests/test-wp-rtcamp-slider-settings-assignment-2a-ajax.php:36
+msgid "Delete Slide"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:315
+msgid "Animation Type"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:320
+msgid "Animation Speed"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:324
+msgid "Animation Loop"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:328
+msgid "Randomize slide order"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:332
+msgid "SlideShow Speed"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:430
+msgid "Illegal shortcode parameters detected. !"
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2a.php:453
+msgid "Slider not Found. !"
+msgstr ""
