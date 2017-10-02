@@ -87,7 +87,7 @@ msgid "Animation Type"
 msgstr ""
 
 #: class-wp-rtcamp-assignment-2a.php:320
-msgid "Animation Speed"
+msgid "Animation Speed (milliseconds)"
 msgstr ""
 
 #: class-wp-rtcamp-assignment-2a.php:324
@@ -99,7 +99,7 @@ msgid "Randomize slide order"
 msgstr ""
 
 #: class-wp-rtcamp-assignment-2a.php:332
-msgid "SlideShow Speed"
+msgid "SlideShow Speed (milliseconds)"
 msgstr ""
 
 #: class-wp-rtcamp-assignment-2a.php:430

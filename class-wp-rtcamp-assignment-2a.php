@@ -317,7 +317,7 @@ class Wp_Rtcamp_Assignment_2a {
 						<input type='radio' name='_wprtc_slider_settings[animation_type]' value='slide' " . checked( $animation_type, 'slide', false ) . "'>Slide
 					</div>
 					<div class='wprtc_slideshow_setting'>
-						<label for='_wprtc_slider_settings[animation_speed]'>" . esc_html__( 'Animation Speed', 'wprtc_assignment_2a' ) . ":</label>
+						<label for='_wprtc_slider_settings[animation_speed]'>" . esc_html__( 'Animation Speed (milliseconds)', 'wprtc_assignment_2a' ) . ":</label>
 						<input type='text' name='_wprtc_slider_settings[animation_speed]' value='" . esc_html( $animation_speed ) . "'>
 					</div>
 					<div class='wprtc_slideshow_setting'>
@@ -329,7 +329,7 @@ class Wp_Rtcamp_Assignment_2a {
 						<input type='checkbox' name='_wprtc_slider_settings[randomize]' value='true' " . checked( $randomize, 'true', false ) . ">
 					</div>
 					<div class='wprtc_slideshow_setting'>
-						<label for='_wprtc_slider_settings[slideshow_speed]'>" . esc_html__( 'SlideShow Speed', 'wprtc_assignment_2a' ) . ":</label>
+						<label for='_wprtc_slider_settings[slideshow_speed]'>" . esc_html__( 'SlideShow Speed (milliseconds)', 'wprtc_assignment_2a' ) . ":</label>
 						<input type='text' name='_wprtc_slider_settings[slideshow_speed]' value='" . esc_html( $slideshow_speed ) . "'>
 					</div>
 		</div>";

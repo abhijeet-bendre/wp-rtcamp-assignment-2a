@@ -6,7 +6,7 @@
  */
 
 /**
- * Sample test case.
+ * Test Case for Slider Settings
  */
 class Wp_Rtcamp_Slider_Settings_Assignment_2a_Test extends WP_UnitTestCase {
 	/**
