@@ -131,7 +131,7 @@ class Wp_Rtcamp_Assignment_2a {
 		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
 		$post_id = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
 
-		if ( ( 'wprtc_slideshow' === $post_type && in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) )
+		if ( ( 'wprtc_slideshow' === $post_type || in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) )
 				||
 				( 'post.php' === $pagenow && 'wprtc_slideshow' === get_post_type( $post_id ) )
 			) {
