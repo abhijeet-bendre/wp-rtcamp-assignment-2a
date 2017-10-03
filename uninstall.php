@@ -33,5 +33,5 @@ function wprtc_delete_plugin_cpt_and_meta() {
 	}
 
 }
-define( 'WPRTC_DELETE_ALL_DATA', true );
+
 wprtc_delete_plugin_cpt_and_meta();
