@@ -15,7 +15,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 /**
  * If WPRTC_DELETE_ALL_DATA constant is set to true in wp-config.php then only delete the associated data.
  */
-public function wprtc_delete_plugin_cpt_and_meta() {
+function wprtc_delete_plugin_cpt_and_meta() {
 	global $wpdb;
 
 	if ( defined( 'WPRTC_DELETE_ALL_DATA' ) && true === WPRTC_DELETE_ALL_DATA ) {
