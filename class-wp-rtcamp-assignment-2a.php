@@ -41,11 +41,21 @@ class Wp_Rtcamp_Assignment_2a {
 	 * @since 0.1
 	 */
 	public function __construct() {
+		add_action( 'plugins_loaded', array( $this, 'wprtc_load_plugin_textdomain' ) );
 		add_action( 'init', array( $this, 'wprtc_register_rtcamp_slideshow_post_type' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprtc_init_front_end_assets' ) );
 		add_shortcode( 'wprtc_slideshow', array( $this, 'wprtc_slideshow' ) );
 		add_action( 'admin_menu', array( $this, 'wprtc_hide_wprtc_slideshow_cpt_menu' ) );
+	}
+
+	/**
+	 * Load the plugin's translated strings, if available.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_load_plugin_textdomain() {
+		load_plugin_textdomain( 'wprtc_assignment_2a', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
