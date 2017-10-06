@@ -103,39 +103,39 @@
 @media all and (max-width: 575px) {
 
   .wprtc_image_preview {
-    width: 100%;
+	   width: 100%;
   }
 
   .wprtc_slide_actions_wrapper {
-      padding: 20px 0px;
-      width: 100%;
-      margin: 0 auto;
-      display: inherit;
+	   padding: 20px 0px;
+	   width: 100%;
+	   margin: 0 auto;
+	   display: inherit;
   }
 
   .wprtc_edit_slide_button,
   .wprtc_delete_slide_button {
-    margin-right: 5px;
+	   margin-right: 5px;
   }
 }
 
 @media all and (min-width: 576px) and (min-width: 960px) {
 
   .wprtc_slide_actions_wrapper {
-      padding: 16px;
-      margin: 0 auto;
-      display: inherit;
+	   padding: 16px;
+	   margin: 0 auto;
+	   display: inherit;
   }
 
   .wprtc_edit_slide_button,
   .wprtc_delete_slide_button {
-    margin-right: 10px;
+	   margin-right: 10px;
   }
 
 }
 
 @media all and (min-width: 1200px) {
   .wprtc_slide_actions {
-    margin-top: 50px;
+	  margin-top: 50px;
   }
 }
