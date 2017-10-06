@@ -435,6 +435,7 @@ class Wp_Rtcamp_Assignment_2a {
 			$args , 'wprtc_slideshow'
 		);
 
+		ob_start();
 		if ( ! isset( $args['slider_id'] ) || 0 === $args['slider_id'] ) {
 			return '<div class="wprtc_general_error">' .
 								esc_html__( 'Illegal shortcode parameters detected. !', 'wprtc_assignment_2a' ) .
@@ -443,14 +444,13 @@ class Wp_Rtcamp_Assignment_2a {
 
 		$slider_images = get_post_meta( (int) $args['slider_id'], '_wprtc_slideshow_slides' );
 		$slider_settings = get_post_meta( (int) $args['slider_id'], '_wprtc_slideshow_settings' );
-		$post_status = get_post_status( $args['slider_id'] );
+		$post_status = get_post_status( (int) $args['slider_id'] );
 
-		ob_start();
 		echo '<div class="flexslider">';
 		if ( ! empty( $slider_images ) && 'publish' === $post_status ) {
+
 			$slider_settings = isset( $slider_settings[0] ) ? $slider_settings[0] : '';
 			$slider_images = $slider_images[0];
-
 			echo '<ul class="slides">';
 			foreach ( $slider_images as $slide_order => $slide_atachment_id ) {
 				echo "<li>
@@ -479,7 +479,7 @@ class Wp_Rtcamp_Assignment_2a {
 			});
 		</script>
 		<?php
-		return ob_get_clean();
+		ob_get_flush();
 	}
 }
 
